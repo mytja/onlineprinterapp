@@ -27,7 +27,7 @@ jobs:
 
     - run: flutter devices
     
-    - run: flutter run -d windows --verbose
+    - run: flutter build windows
       
     - uses: actions/upload-artifact@v1
       with:
