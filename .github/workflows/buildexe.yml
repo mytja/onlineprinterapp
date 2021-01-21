@@ -22,9 +22,9 @@ jobs:
 
     - run: flutter config --enable-windows-desktop
     
-    - run: flutter build windows
+    - run: flutter run -d windows --verbose
       
     - uses: actions/upload-artifact@v1
       with:
         name: Upload Windows app
-        path: build/app/outputs/bundle/release/app-release.aab
+        path: build\windows\x64\Debug\Runner\onlineprinterapp.exe
