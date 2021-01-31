@@ -17,7 +17,7 @@ jobs:
       with:
         channel: dev
     
-    - run: flutter create .
+    #- run: flutter create .
 
     - run: flutter pub get
 
@@ -29,10 +29,10 @@ jobs:
     
     - run: flutter build windows --verbose
 
-    - run: dir build\windows\x64\Debug\Runner\
+    - run: dir build\windows\runner\Release\
       
     - uses: actions/upload-artifact@v1
       with:
         name: Upload Windows app
-        path: build\windows\x64\Debug\Runner\onlineprinterapp.exe
+        path: build\windows\runner\Release\
 
