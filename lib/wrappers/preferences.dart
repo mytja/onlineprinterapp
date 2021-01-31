@@ -20,24 +20,28 @@ class SP {
     }
   }
 
-  getFromPref(String prefName, Type type) async {
+  Future<SharedPreferences> getInstanceSH() {
+    return SharedPreferences.getInstance();
+  }
+
+  Future<dynamic> getFromPref(String prefName, Type type) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var pref;
     if (type is int) {
-      pref = prefs.getInt(prefName);
+      var pref = prefs.getInt(prefName) ?? 0;
+      return pref;
     } else if (type is String) {
-      pref = prefs.getString(prefName);
+      var pref = prefs.getString(prefName) ?? "";
+      return pref;
     } else if (type is bool) {
-      pref = prefs.getBool(prefName);
+      var pref = prefs.getBool(prefName);
     } else if (type is double) {
-      pref = prefs.getDouble(prefName);
+      var pref = prefs.getDouble(prefName);
     } else if (type is List<String>) {
-      pref = prefs.getStringList(prefName);
+      var pref = prefs.getStringList(prefName);
     } else {
       print("Unsupported type!");
       return ERR_UNSP;
     }
-    return pref;
   }
 
   void removeFromPref(String prefName) async {

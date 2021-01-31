@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'wrappers/preferences.dart';
+import 'login.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,16 +45,52 @@ class Start extends StatefulWidget {
 
 class TryLogin extends State<Start> {
   SP sp;
+
+  Future<SharedPreferences> getInstance() {
+    return SharedPreferences.getInstance();
+  }
+
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: Theme.of(context).textTheme.headline2,
       textAlign: TextAlign.center,
-      child: FutureBuilder<String>(
-          future: sp.getFromPref("username",
-              String), // a previously-obtained Future<String> or null
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            List<Widget> children;
-            if (snapshot.hasData) {}
+      child: FutureBuilder<SharedPreferences>(
+          future: getInstance(), // a previously-obtained Future<String> or null
+          // ignore: missing_return
+          builder: (BuildContext context,
+              AsyncSnapshot<SharedPreferences> snapshot) {
+            if (snapshot.hasData) {
+              SharedPreferences shp = snapshot.data;
+              String username = shp.getString("username");
+              String password = shp.getString("password");
+              print(username);
+              print(password);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Login(
+                          password: password,
+                          username: username,
+                        )),
+              );
+            } else {
+              return Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      child: CircularProgressIndicator(),
+                      width: 60,
+                      height: 60,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Awaiting result...'),
+                    )
+                  ],
+                ),
+              );
+            }
           }),
     );
   }
