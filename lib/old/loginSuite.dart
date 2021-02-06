@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'constants/constants.dart';
+import '../constants/constants.dart';
 
 class LoginSuite {
   dynamic login(String username, String password) async {

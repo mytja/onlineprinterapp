@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:onlineprinterapp/loginSuite.dart';
 import 'wrappers/preferences.dart';
 import 'package:http/http.dart' as http;
 import 'constants/constants.dart';
@@ -33,8 +32,6 @@ class LoginMain extends State<Login> {
       return response.body.toString();
     }
   }
-
-  LoginSuite ls;
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
