@@ -1,3 +1,3 @@
-const String SERVER_URL = "https://onlineprinter.si";
-const String SERVER_URL_API = "https://onlineprinter.si/api";
-const String SERVER_URL_LOGIN = "https://onlineprinter.si/api/login";
+const String SERVER_URL = "http://83.212.127.208:5000/";
+const String SERVER_URL_API = SERVER_URL + "api";
+const String SERVER_URL_LOGIN = SERVER_URL + "api/auth/login";

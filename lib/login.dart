@@ -20,10 +20,19 @@ class Login extends StatefulWidget {
 class LoginMain extends State<Login> {
   SP sp;
 
-  final _formKey = GlobalKey<FormState>();
-
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  Future<String> getResponse(String password, String username) async {
+    if (password == "" || username == "") {
+      print("None!");
+      return "None";
+    } else {
+      var response = await http.get(
+          SERVER_URL_LOGIN + "?username=" + username + "&password=" + password);
+      return response.body.toString();
+    }
+  }
 
   LoginSuite ls;
 
@@ -31,121 +40,159 @@ class LoginMain extends State<Login> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
-        body: Column(
-          children: <Widget>[
-            Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: 20,
-                    ),
-                    Text(
-                      "OnlinePrinter Login",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    Container(
-                      height: 20,
-                    ),
-                    Container(
-                      width: width - 50,
-                      child: TextFormField(
-                        controller: _usernameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter your email or username',
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter username or email';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: width - 50,
-                      child: TextFormField(
-                        obscureText: true,
-                        controller: _passwordController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter your password',
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a password';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      height: 60,
-                      width: width,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              // Validate will return true if the form is valid, or false if
-                              // the form is invalid.
-                              if (_formKey.currentState.validate()) {
-                                // Process data.
-                              }
-
-                              if (_usernameController.text != null &&
-                                  _passwordController.text != null) {
-                                print("Okay!");
-                                var login = await ls.login(
-                                    _usernameController.text,
-                                    _passwordController.text);
-                                if (login == 408) {
-                                  return AlertDialog(
-                                      title: Text('Login Failed!'),
-                                      content: SingleChildScrollView(
-                                        child: ListBody(
-                                          children: <Widget>[
-                                            Text(
-                                                'Timeout error on our server...'),
-                                            Text('\u1F62C		'),
-                                          ],
-                                        ),
-                                      ));
-                                }
-                                if (login == 403) {
-                                  return AlertDialog(
-                                      title: Text('Login Failed!'),
-                                      content: SingleChildScrollView(
-                                        child: ListBody(
-                                          children: <Widget>[
-                                            Text(
-                                                'Did you enter wrong login information?'),
-                                            Text('\u1F914	'),
-                                          ],
-                                        ),
-                                      ));
-                                }
-                              }
-                            },
-                            child: Text('Submit'),
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.headline2,
+      textAlign: TextAlign.center,
+      child: FutureBuilder<String>(
+        future: getResponse(
+            _passwordController.text,
+            _usernameController
+                .text), // a previously-obtained Future<String> or null
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          List<Widget> children;
+          if (snapshot.hasData) {
+            var snapdata = snapshot.data;
+            if (snapdata == "None") {
+              children = <Widget>[
+                Container(height: 50),
+                Text(
+                  "OnlinePrinter Login",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Container(
+                  height: 20,
+                ),
+                TextField(
+                  obscureText: false,
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Username or E-Mail',
+                  ),
+                ),
+                Container(
+                  height: 5,
+                ),
+                TextField(
+                  obscureText: true,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                  ),
+                ),
+                Container(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text("Login"),
+                  onPressed: () {
+                    setState(() {});
+                  },
+                )
+              ];
+            } else {
+              var jsonL = json.decode(snapdata);
+              print(jsonL);
+              if (jsonL["responseCode"] == 200) {
+                print("OK!");
+                /*
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondRoute()),
+                );
+                */
+              } else {
+                return AlertDialog(
+                  title: Center(
+                    child: Text('Oooops!'),
+                  ),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                "403",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 30),
+                              ),
+                              Text(
+                                "Forbidden",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              Container(
+                                height: 20,
+                              ),
+                              Text(
+                                "🤔",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 30),
+                              ),
+                              Container(
+                                height: 20,
+                              ),
+                              Text(
+                                "You entered wrong login info",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Container(
+                                height: 20,
+                              ),
+                              ElevatedButton(
+                                  child: Text('Return back to login screen'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()),
+                                    );
+                                  }),
+                            ],
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                );
+              }
+            }
+          } else if (snapshot.hasError) {
+            children = <Widget>[
+              Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Error: ${snapshot.error}'),
+              )
+            ];
+          } else {
+            children = <Widget>[
+              SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text('Awaiting result...'),
+              )
+            ];
+          }
+          return MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: children,
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
