@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/dashboard.dart';
 import 'wrappers/preferences.dart';
 import 'package:http/http.dart' as http;
 import 'constants/constants.dart';
@@ -92,14 +93,15 @@ class LoginMain extends State<Login> {
               var jsonL = json.decode(snapdata);
               print(jsonL);
               if (jsonL["responseCode"] == 200) {
-                print("OK!");
-                /*
+                Text("Please wait, redirecting");
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SecondRoute()),
+                  MaterialPageRoute(
+                      builder: (context) => Dashboard(
+                            username: _usernameController.text,
+                          )),
                 );
-                */
-              } else {
+              } else if (jsonL["responseCode"] == 403) {
                 return AlertDialog(
                   title: Center(
                     child: Text('Oooops!'),
@@ -154,6 +156,61 @@ class LoginMain extends State<Login> {
                     ),
                   ),
                 );
+              } else if (jsonL["responseCode"] == 500) {
+                return AlertDialog(
+                  title: Center(
+                    child: Text('Oooops!'),
+                  ),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                "500",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 30),
+                              ),
+                              Text(
+                                "Internal Server Error",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              Container(
+                                height: 20,
+                              ),
+                              Text(
+                                "🤔",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 30),
+                              ),
+                              Container(
+                                height: 20,
+                              ),
+                              Text(
+                                "Server had an internal error. Please try again",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Container(
+                                height: 20,
+                              ),
+                              ElevatedButton(
+                                  child: Text('Return back to login screen'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()),
+                                    );
+                                  }),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               }
             }
           } else if (snapshot.hasError) {
@@ -186,6 +243,7 @@ class LoginMain extends State<Login> {
               body: Column(
                 children: children,
               ),
+              appBar: AppBar(title: Text("OnlinePrinterApp")),
             ),
           );
         },

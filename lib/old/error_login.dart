@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:onlineprinterapp/loginSuite.dart';
 import '../login.dart';
 
 class Error extends StatefulWidget {
@@ -17,13 +16,6 @@ class Error extends StatefulWidget {
 }
 
 class ErrorScreen extends State<Error> {
-  final _formKey = GlobalKey<FormState>();
-
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  LoginSuite ls;
-
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -32,6 +24,27 @@ class ErrorScreen extends State<Error> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Login Error'),
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text('Drawer Header'),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                title: Text('Item 1'),
+                onTap: () {},
+              ),
+              ListTile(
+                title: Text('Item 2'),
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
         body: Column(
           children: <Widget>[
