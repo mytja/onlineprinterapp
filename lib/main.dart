@@ -13,7 +13,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Title',
+        title: 'OnlinePrinterApp',
         home: Scaffold(
           body: Login(),
           appBar: AppBar(
@@ -64,7 +64,6 @@ class LoginMain extends State<Login> {
           if (snapshot.hasData) {
             var snapdata = snapshot.data;
             if (snapdata == "None") {
-              print("None snapdata");
               children = <Widget>[
                 Container(height: 50),
                 Text(
@@ -110,7 +109,7 @@ class LoginMain extends State<Login> {
                 children = <Widget>[
                   AlertDialog(
                     title: Center(
-                      child: Text('Oooops!'),
+                      child: Text('Yay!'),
                     ),
                     content: SingleChildScrollView(
                       child: ListBody(
