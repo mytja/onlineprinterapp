@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'constants/constants.dart';
+import 'orders.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key key, this.username}) : super(key: key);
+  Dashboard({Key key, this.username, this.password}) : super(key: key);
 
   final String username;
+  final String password;
 
   @override
   DashboardMain createState() => DashboardMain();
 }
 
 class DashboardMain extends State<Dashboard> {
-  Future<String> getResponse() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<String> getOrders(String password, String username) async {
+    if (password == "" || username == "") {
+      print("None!");
+      return "None";
+    } else {
+      var response = await http.get(SERVER_URL_ORDERS +
+          "?username=" +
+          username +
+          "&password=" +
+          password);
+      return response.body.toString();
+    }
   }
 
   Widget build(BuildContext context) {
@@ -24,6 +36,12 @@ class DashboardMain extends State<Dashboard> {
     String usertext = "Hi, " + username;
 
     return MaterialApp(
+      routes: {
+        'orders': (context) => Orders(
+              username: widget.username,
+              password: widget.password,
+            ),
+      },
       home: Scaffold(
         body: Column(children: <Widget>[
           Container(
@@ -50,29 +68,20 @@ class DashboardMain extends State<Dashboard> {
                 ),
               ),
               ListTile(
-                title: Text('Orders'),
-                onTap: () {
-                  Fluttertoast.showToast(
-                      msg: "Work in progress",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                },
+                title: Text("Dashboard"),
               ),
               ListTile(
-                title: Text('Camera stream'),
-                onTap: () {
-                  Fluttertoast.showToast(
-                      msg: "Work in progress",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
+                title: Text('Orders'),
+                onTap: () async {
+                  var json = await getOrders(widget.password, widget.username);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Orders(
+                            username: widget.username,
+                            password: widget.password,
+                            json: json)),
+                  );
                 },
               ),
             ],
