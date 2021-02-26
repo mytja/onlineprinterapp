@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'order.dart';
 
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,6 @@ class OrdersMain extends State<Orders> {
     var jsonOrders = jsonL["orders"];
 
     print(jsonOrders);
-    print(jsonOrders[0]);
 
     return MaterialApp(
         home: Scaffold(
@@ -42,48 +42,63 @@ class OrdersMain extends State<Orders> {
           children: <Widget>[
             Container(width: 5),
             Container(
-                width: width / 4,
-                child: Text("Name",
-                    style: TextStyle(fontWeight: FontWeight.bold))),
-            Container(
-                width: width / 4,
+                width: width / 2,
                 child: Text("Filename",
                     style: TextStyle(fontWeight: FontWeight.bold))),
+            Container(width: 10),
             Container(
-                width: width / 4,
-                child: Text("Status",
-                    style: TextStyle(fontWeight: FontWeight.bold))),
-            Container(
-                width: width / 4 - 5,
+                width: width / 10,
                 child:
                     Text("ID", style: TextStyle(fontWeight: FontWeight.bold))),
+            Container(
+                width: width / 3 - 6,
+                child: Text("Details",
+                    style: TextStyle(fontWeight: FontWeight.bold))),
           ],
         ),
-        /*
         ListView.builder(
+            shrinkWrap: true,
             padding: const EdgeInsets.all(8),
             itemCount: jsonOrders.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                  height: 50,
-                  width: double.infinity,
-                  //color: colorfromhex(jsonOrders[index]["color"]),
-                  child: Row(
-                    children: <Widget>[
-                      Text(jsonOrders[index]["oldFilename"],
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(jsonOrders[index]["filename"],
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(jsonOrders[index]["status"],
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(jsonOrders[index]["date"].toString(),
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(jsonOrders[index]["id"].toString(),
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ],
-                  ));
+                height: 50,
+                width: width,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        width: width / 2,
+                        child: Text(jsonOrders[index]["filename"])),
+                    Container(
+                      width: 5,
+                      color: colorfromhex(jsonOrders[index]["color"]),
+                    ),
+                    Container(width: 5),
+                    Container(
+                        width: width / 10,
+                        child: Text(
+                          jsonOrders[index]["id"].toString(),
+                        )),
+                    Container(
+                        width: width / 3 - 6,
+                        child: ElevatedButton(
+                          child: Text("DETAILS"),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Order(
+                                        id: jsonOrders[index]["id"],
+                                        username: widget.username,
+                                        password: widget.password,
+                                      )),
+                            );
+                          },
+                        ))
+                  ],
+                ),
+              );
             })
-            */
       ]),
       appBar: AppBar(title: Text("OnlinePrinterApp")),
       drawer: Drawer(
