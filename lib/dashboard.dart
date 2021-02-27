@@ -116,7 +116,117 @@ class DashboardMain extends State<Dashboard> {
                     ),
                   ),
                 ],
-              )
+              ),
+              Container(
+                height: 20,
+              ),
+              Container(
+                  height: 20,
+                  child: Center(
+                      child: Text(
+                    'Bed',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ))),
+              Container(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 5,
+                  ),
+                  Container(
+                    width: width / 2 - 5,
+                    child: Text(
+                      'Current temperature',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  Container(
+                    width: width / 2,
+                    child: Text(
+                      jsonL["temp"]["bed"]["current"].toString(),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 5,
+                  ),
+                  Container(
+                    width: width / 2 - 5,
+                    child: Text(
+                      'Target temperature',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  Container(
+                    width: width / 2,
+                    child: Text(
+                      jsonL["temp"]["bed"]["target"].toString(),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                height: 20,
+              ),
+              Container(
+                  height: 20,
+                  child: Center(
+                      child: Text(
+                    'Nozzle',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ))),
+              Container(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 5,
+                  ),
+                  Container(
+                    width: width / 2 - 5,
+                    child: Text(
+                      'Current temperature',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  Container(
+                    width: width / 2,
+                    child: Text(
+                      jsonL["temp"]["nozzle"]["current"].toString(),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 5,
+                  ),
+                  Container(
+                    width: width / 2 - 5,
+                    child: Text(
+                      'Target temperature',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  Container(
+                    width: width / 2,
+                    child: Text(
+                      jsonL["temp"]["nozzle"]["target"].toString(),
+                    ),
+                  ),
+                ],
+              ),
             ];
           } else if (snapshot.hasError) {
             children = <Widget>[
