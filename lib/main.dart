@@ -5,6 +5,8 @@ import 'package:onlineprinterapp/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'constants/constants.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() {
   runApp(App());
 }
@@ -36,8 +38,18 @@ class LoginMain extends State<Login> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<String> getResponse(String password, String username) async {
-    if (password == "" || username == "") {
+  Future<String> getResponse(
+      String password, String username, bool retryWithShared) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user = prefs.getString('username') ?? null;
+    String pass = prefs.getString('password') ?? null;
+    if (pass != null && user != null && retryWithShared) {
+      _usernameController.text = user;
+      _passwordController.text = pass;
+      var response = await http
+          .get(SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass);
+      return response.body.toString();
+    } else if (password == "" || username == "" && retryWithShared == false) {
       print("None");
       return "None";
     } else {
@@ -47,6 +59,8 @@ class LoginMain extends State<Login> {
     }
   }
 
+  bool retry = true;
+
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -55,10 +69,8 @@ class LoginMain extends State<Login> {
       style: Theme.of(context).textTheme.headline2,
       textAlign: TextAlign.center,
       child: FutureBuilder<String>(
-        future: getResponse(
-            _passwordController.text,
-            _usernameController
-                .text), // a previously-obtained Future<String> or null
+        future: getResponse(_passwordController.text, _usernameController.text,
+            retry), // a previously-obtained Future<String> or null
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
@@ -150,7 +162,13 @@ class LoginMain extends State<Login> {
                                 ),
                                 ElevatedButton(
                                     child: Text('Go to dashboard'),
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      await prefs.setString(
+                                          'username', _usernameController.text);
+                                      await prefs.setString(
+                                          'password', _passwordController.text);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -212,11 +230,11 @@ class LoginMain extends State<Login> {
                               ElevatedButton(
                                   child: Text('Return back to login screen'),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Login()),
-                                    );
+                                    _usernameController.text = "";
+                                    _passwordController.text = "";
+                                    setState(() {
+                                      retry = false;
+                                    });
                                   }),
                             ],
                           ),

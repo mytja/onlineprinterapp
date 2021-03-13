@@ -5,3 +5,5 @@ const String SERVER_URL_ORDERS = SERVER_URL + "api/orders/getAll";
 const String SERVER_URL_ORDER = SERVER_URL + "api/order/";
 const String SERVER_URL_ORDER_START = SERVER_URL + "api/orders/start/";
 const String SERVER_URL_PRINTER = SERVER_URL + "api/printer";
+const String SERVER_URL_BED_SET = SERVER_URL + "api/printer/bed/";
+const String SERVER_URL_NOZZLE_SET = SERVER_URL + "api/printer/toolč/";
