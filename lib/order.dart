@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'constants/constants.dart';
 
+import 'printerror.dart';
+
 /// This is the stateful widget that the main application instantiates.
 class Order extends StatefulWidget {
   Order({Key key, this.id, this.username, this.password}) : super(key: key);
@@ -56,6 +58,7 @@ class OrderMain extends State<Order> {
           List<Widget> children;
           if (snapshot.hasData) {
             var jsonL = json.decode(snapshot.data);
+            print(jsonL);
             print(jsonL["responseCode"]);
             if (jsonL["responseCode"] == 200) {
               children = <Widget>[
@@ -98,11 +101,6 @@ class OrderMain extends State<Order> {
                   Container(
                     width: 5,
                   ),
-                  Container(
-                      width: width / 3 - 5,
-                      child: Text("Old filename",
-                          style: TextStyle(fontWeight: FontWeight.bold))),
-                  Container(width: width / 3 * 2, child: Text(jsonL["file"]))
                 ]),
                 Row(children: [
                   Container(
@@ -125,26 +123,13 @@ class OrderMain extends State<Order> {
                               widget.password);
                           print(r.body);
                           var jsonL2 = json.decode(r.body);
-                          if (jsonL2["responseCode"] == 204) {
-                            return AlertDialog(
-                              title: Text('Printing'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: <Widget>[
-                                    Text('Successfully started to print.'),
-                                  ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PrintError(
+                                      responseCode: jsonL2["responseCode"],
+                                    )),
+                          );
                         },
                       ))
                 ]),
