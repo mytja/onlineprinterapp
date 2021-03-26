@@ -7,8 +7,23 @@ import 'constants/constants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final loginutils = LoginUtils();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String user = prefs.getString('username') ?? null;
+  String pass = prefs.getString('password') ?? null;
+  String response = await loginutils.startLogin(user, pass);
+  if (response != "") {
+    var jsonL = json.decode(response);
+    if (jsonL["responseCode"] == 200) {
+      runApp(DApp(username: user, password: pass));
+    } else {
+      runApp(App());
+    }
+  } else {
+    runApp(App());
+  }
 }
 
 class App extends StatelessWidget {
@@ -34,18 +49,13 @@ class Login extends StatefulWidget {
   LoginMain createState() => LoginMain();
 }
 
-class LoginMain extends State<Login> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-
+class LoginUtils {
   Future<String> getResponse(
       String password, String username, bool retryWithShared) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String user = prefs.getString('username') ?? null;
     String pass = prefs.getString('password') ?? null;
     if (pass != null && user != null && retryWithShared) {
-      _usernameController.text = user;
-      _passwordController.text = pass;
       var response = await http
           .get(SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass);
       return response.body.toString();
@@ -59,17 +69,33 @@ class LoginMain extends State<Login> {
     }
   }
 
+  Future<String> startLogin(String user, String pass) async {
+    if (pass != null && user != null) {
+      var response = await http
+          .get(SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass);
+      return response.body.toString();
+    } else {
+      return "";
+    }
+  }
+}
+
+class LoginMain extends State<Login> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   bool retry = true;
 
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+  final loginutils = LoginUtils();
 
+  Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: Theme.of(context).textTheme.headline2,
       textAlign: TextAlign.center,
       child: FutureBuilder<String>(
-        future: getResponse(_passwordController.text, _usernameController.text,
+        future: loginutils.getResponse(
+            _passwordController.text,
+            _usernameController.text,
             retry), // a previously-obtained Future<String> or null
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           List<Widget> children;

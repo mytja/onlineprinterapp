@@ -13,7 +13,7 @@ class PrintError extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class PrintErrorMain extends State<PrintError> {
   Widget build(BuildContext context) {
-    if (widget.responseCode == 204) {
+    if (300 > widget.responseCode && widget.responseCode > 199) {
       return AlertDialog(
         title: Text('Printing'),
         content: SingleChildScrollView(
@@ -32,7 +32,7 @@ class PrintErrorMain extends State<PrintError> {
           ),
         ],
       );
-    } else if (widget.responseCode == 408) {
+    } else {
       return AlertDialog(
         title: Text('Failed to start a print'),
         content: SingleChildScrollView(

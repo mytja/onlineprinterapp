@@ -2,9 +2,27 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/widgets/waiting.dart';
 import 'constants/constants.dart';
-import 'orders.dart';
+import 'widgets/drawer.dart';
 import 'package:http/http.dart' as http;
+
+class DApp extends StatelessWidget {
+  DApp({this.username, this.password});
+
+  final String username;
+  final String password;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: Scaffold(
+      appBar: AppBar(title: Text("OnlinePrinterApp")),
+      drawer: PrinterDrawer(password: this.password, username: this.username),
+      body: Dashboard(password: this.password, username: this.username),
+    ));
+  }
+}
 
 class Dashboard extends StatefulWidget {
   Dashboard({Key key, this.username, this.password}) : super(key: key);
@@ -18,6 +36,8 @@ class Dashboard extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class DashboardMain extends State<Dashboard> {
+  final waiting = Waiting();
+
   @override
   void initState() {
     super.initState();
@@ -32,60 +52,11 @@ class DashboardMain extends State<Dashboard> {
     return response.body.toString();
   }
 
-  Future<String> getOrders(String password, String username) async {
-    if (password == "" || username == "") {
-      print("None!");
-      return "None";
-    } else {
-      var response = await http.get(SERVER_URL_ORDERS +
-          "?username=" +
-          username +
-          "&password=" +
-          password);
-      return response.body.toString();
-    }
-  }
-
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(title: Text("OnlinePrinterApp")),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text("OnlinePrinterApp - Dashboard"),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text("Dashboard"),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text('Orders'),
-              onTap: () async {
-                var r = await getOrders(widget.password, widget.username);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Orders(
-                            username: widget.username,
-                            password: widget.password,
-                            json: r,
-                          )),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      body: FutureBuilder<String>(
+    return FutureBuilder<String>(
         future: getPrinter(), // a previously-obtained Future<String> or null
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           List<Widget> children;
@@ -305,25 +276,11 @@ class DashboardMain extends State<Dashboard> {
               )
             ];
           } else {
-            children = <Widget>[
-              Center(
-                child: SizedBox(
-                  child: CircularProgressIndicator(),
-                  width: 60,
-                  height: 60,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ];
+            children = <Widget>[waiting.waiting()];
           }
           return ListView(
             children: children,
           );
-        },
-      ),
-    ));
+        });
   }
 }
