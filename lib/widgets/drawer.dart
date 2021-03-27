@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/constants.dart';
 import '../orders.dart';
 import '../dashboard.dart';
 import '../camera.dart';
+import '../settings.dart';
 
 class PrinterDrawer extends StatefulWidget {
   PrinterDrawer({this.password, this.username});
@@ -32,14 +35,21 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          DrawerHeader(
-            child: Text("OnlinePrinterApp - Dashboard"),
-            decoration: BoxDecoration(
-              color: Colors.blue,
+          Container(
+            width: width,
+            child: DrawerHeader(
+              child: Text("OnlinePrinterApp - Dashboard"),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
             ),
           ),
           ListTile(
@@ -80,6 +90,33 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
                           username: widget.username,
                           password: widget.password,
                         )),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('Settings'),
+            onTap: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Setting(
+                        username: widget.username,
+                        password: widget.password,
+                        sp: prefs)),
+              );
+            },
+          ),
+          Spacer(),
+          ListTile(
+            title: Text('Logout'),
+            onTap: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove("username");
+              prefs.remove("password");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => App()),
               );
             },
           ),

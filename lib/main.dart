@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/dashboard.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/settings.dart';
 import 'constants/constants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,12 +30,42 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return MaterialApp(
         title: 'OnlinePrinterApp',
         home: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Login(),
           appBar: AppBar(
             title: Text("OnlinePrinterApp"),
+          ),
+          drawer: Drawer(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: width,
+                  child: DrawerHeader(
+                    child: Text("OnlinePrinterApp - Dashboard"),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: Text('Settings'),
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Setting(sp: prefs)),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -198,7 +229,7 @@ class LoginMain extends State<Login> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Dashboard(
+                                            builder: (context) => DApp(
                                                   username:
                                                       _usernameController.text,
                                                   password:

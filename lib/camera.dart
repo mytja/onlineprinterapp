@@ -1,12 +1,10 @@
-import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
-import 'package:onlineprinterapp/widgets/waiting.dart';
+
 import 'constants/constants.dart';
 import 'widgets/drawer.dart';
-import 'package:http/http.dart' as http;
-//import 'old/mjpeg_player.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'old/mjpeg_player.dart';
 
 class Camera extends StatelessWidget {
   Camera({this.username, this.password});
@@ -37,26 +35,40 @@ class CameraStream extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class CameraStreamMain extends State<CameraStream> {
-  final waiting = Waiting();
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      const oneSecond = const Duration(seconds: 2);
-      new Timer.periodic(oneSecond, (Timer t) => setState(() {}));
-    });
-  }
-
-  Future<String> getPrinter() async {
-    var response = await http.get(SERVER_URL_PRINTER);
-    return response.body.toString();
-  }
-
   Widget build(BuildContext context) {
-    return Center(
-        child: WebView(
-      initialUrl: SERVER_URL_WEBCAM,
-    ));
+    print(SERVER_URL_WEBCAM);
+
+    if (Platform.isAndroid ||
+        Platform.isIOS ||
+        Platform.isLinux ||
+        Platform.isWindows ||
+        Platform.isMacOS) {
+      return Center(
+          child: ListView(children: [
+        Container(
+          height: 30,
+        ),
+        Center(
+            child: Text(
+          "Webcam Stream: ",
+          style: TextStyle(fontSize: 26),
+        )),
+        MjpegView(
+          url: SERVER_URL_WEBCAM,
+        )
+      ]));
+    } else {
+      return Center(
+          child: ListView(children: [
+        Container(
+          height: 30,
+        ),
+        Center(
+            child: Text(
+          "Sorry, but webcam stream is not supported on this platform yet 😢",
+          style: TextStyle(fontSize: 26),
+        )),
+      ]));
+    }
   }
 }
