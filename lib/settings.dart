@@ -3,35 +3,44 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'constants/constants.dart';
 
 class Setting extends StatelessWidget {
-  Setting({this.username, this.password, this.sp});
+  Setting({this.username, this.password, required this.sp});
 
-  final String username;
-  final String password;
+  final String? username;
+  final String? password;
   final SharedPreferences sp;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        title: Text("OnlinePrinterApp"),
-        leading: BackButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        theme: ThemeData(
+          brightness: Brightness.light,
         ),
-      ),
-      body: Settings(
-          password: this.password, username: this.username, sp: this.sp),
-    ));
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text("OnlinePrinterApp"),
+            leading: BackButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          body: Settings(
+              password: this.password, username: this.username, sp: this.sp),
+        ));
   }
 }
 
 class Settings extends StatefulWidget {
-  Settings({Key key, this.username, this.password, this.sp}) : super(key: key);
+  Settings({Key? key, this.username, this.password, required this.sp})
+      : super(key: key);
 
-  final String username;
-  final String password;
+  final String? username;
+  final String? password;
   final SharedPreferences sp;
 
   @override

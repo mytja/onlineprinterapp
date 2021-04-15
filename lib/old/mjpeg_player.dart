@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'dart:async';
 
 class MjpegView extends StatefulWidget {
-  MjpegView({this.url, this.fps = 2});
+  MjpegView({required this.url, this.fps = 2});
 
   final String url;
   final int fps;
@@ -15,12 +15,12 @@ class MjpegView extends StatefulWidget {
 }
 
 class MjpegViewState extends State<MjpegView> {
-  Image mjpeg = null;
+  late Image mjpeg;
   var imgBuf;
   Stopwatch timer = Stopwatch();
 
   http.Client client = http.Client();
-  StreamSubscription videoStream;
+  StreamSubscription? videoStream;
 
   @override
   void initState() {
@@ -31,9 +31,9 @@ class MjpegViewState extends State<MjpegView> {
     client.send(request).then((response) {
       var startIndex = -1;
       var endIndex = -1;
-      List<int> buf = List<int>();
+      List<int> buf = [];
 
-      Duration ts = null;
+      Duration ts;
 
       timer.start();
 
@@ -72,7 +72,7 @@ class MjpegViewState extends State<MjpegView> {
           }
 
           startIndex = endIndex = -1;
-          buf = List<int>();
+          buf = [];
           timer.start();
         }
       });
@@ -81,9 +81,9 @@ class MjpegViewState extends State<MjpegView> {
 
   @override
   void deactivate() {
-    timer?.stop();
+    timer.stop();
     videoStream?.cancel();
-    client?.close();
+    client.close();
 
     super.deactivate();
   }

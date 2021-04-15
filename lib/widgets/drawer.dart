@@ -9,7 +9,7 @@ import '../camera.dart';
 import '../settings.dart';
 
 class PrinterDrawer extends StatefulWidget {
-  PrinterDrawer({this.password, this.username});
+  PrinterDrawer({required this.password, required this.username});
 
   final String username;
   final String password;
@@ -24,11 +24,11 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
       print("None!");
       return "None";
     } else {
-      var response = await http.get(SERVER_URL_ORDERS +
+      var response = await http.get(Uri.parse(SERVER_URL_ORDERS +
           "?username=" +
           username +
           "&password=" +
-          password);
+          password));
       return response.body.toString();
     }
   }
@@ -36,6 +36,8 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+
+    var brightness = MediaQuery.of(context).platformBrightness;
 
     return Drawer(
       child: Column(
@@ -48,7 +50,13 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
             child: DrawerHeader(
               child: Text("OnlinePrinterApp - Dashboard"),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: (() {
+                  if (brightness == Brightness.dark) {
+                    return Colors.grey.shade900;
+                  } else {
+                    return Colors.blue;
+                  }
+                }()),
               ),
             ),
           ),
@@ -117,6 +125,46 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => App()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsDrawer extends StatefulWidget {
+  SettingsDrawer();
+
+  @override
+  SettingDrawer createState() => SettingDrawer();
+}
+
+class SettingDrawer extends State<SettingsDrawer> {
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: width,
+            child: DrawerHeader(
+              child: Text("OnlinePrinterApp - Dashboard"),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text('Settings'),
+            onTap: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Setting(sp: prefs)),
               );
             },
           ),

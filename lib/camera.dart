@@ -7,7 +7,7 @@ import 'widgets/drawer.dart';
 import 'old/mjpeg_player.dart';
 
 class Camera extends StatelessWidget {
-  Camera({this.username, this.password});
+  Camera({required this.username, required this.password});
 
   final String username;
   final String password;
@@ -15,16 +15,26 @@ class Camera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        theme: ThemeData(
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-      appBar: AppBar(title: Text("OnlinePrinterApp")),
-      drawer: PrinterDrawer(password: this.password, username: this.username),
-      body: CameraStream(password: this.password, username: this.username),
-    ));
+          appBar: AppBar(title: Text("OnlinePrinterApp")),
+          drawer:
+              PrinterDrawer(password: this.password, username: this.username),
+          body: CameraStream(password: this.password, username: this.username),
+        ));
   }
 }
 
 class CameraStream extends StatefulWidget {
-  CameraStream({Key key, this.username, this.password}) : super(key: key);
+  CameraStream({Key? key, required this.username, required this.password})
+      : super(key: key);
 
   final String username;
   final String password;

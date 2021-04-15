@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class PrintError extends StatefulWidget {
-  PrintError({Key key, this.responseCode}) : super(key: key);
+  PrintError({Key? key, required this.responseCode}) : super(key: key);
 
   final int responseCode;
 

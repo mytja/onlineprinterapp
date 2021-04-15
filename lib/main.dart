@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlineprinterapp/settings.dart';
+import 'package:onlineprinterapp/widgets/drawer.dart';
 import 'constants/constants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,18 +13,48 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final loginutils = LoginUtils();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String user = prefs.getString('username') ?? null;
-  String pass = prefs.getString('password') ?? null;
+  String user = prefs.getString('username') ?? "";
+  String pass = prefs.getString('password') ?? "";
   String response = await loginutils.startLogin(user, pass);
   if (response != "") {
     var jsonL = json.decode(response);
     if (jsonL["responseCode"] == 200) {
-      runApp(DApp(username: user, password: pass));
+      runApp(MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(title: Text("OnlinePrinterApp")),
+          drawer: PrinterDrawer(password: pass, username: user),
+          body: Dashboard(password: pass, username: user),
+        ),
+        theme: ThemeData(
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+      ));
     } else {
-      runApp(App());
+      runApp(MaterialApp(
+          title: 'OnlinePrinterApp',
+          home: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Login(),
+              appBar: AppBar(
+                title: Text("OnlinePrinterApp"),
+              ),
+              drawer: SettingsDrawer())));
     }
   } else {
-    runApp(App());
+    runApp(MaterialApp(
+        title: 'OnlinePrinterApp',
+        home: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Login(),
+            appBar: AppBar(
+              title: Text("OnlinePrinterApp"),
+            ),
+            drawer: SettingsDrawer())));
   }
 }
 
@@ -35,46 +66,17 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'OnlinePrinterApp',
         home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Login(),
-          appBar: AppBar(
-            title: Text("OnlinePrinterApp"),
-          ),
-          drawer: Drawer(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: width,
-                  child: DrawerHeader(
-                    child: Text("OnlinePrinterApp - Dashboard"),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  title: Text('Settings'),
-                  onTap: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Setting(sp: prefs)),
-                    );
-                  },
-                ),
-              ],
+            resizeToAvoidBottomInset: false,
+            body: Login(),
+            appBar: AppBar(
+              title: Text("OnlinePrinterApp"),
             ),
-          ),
-        ));
+            drawer: SettingsDrawer()));
   }
 }
 
 class Login extends StatefulWidget {
-  Login({Key key, this.title}) : super(key: key);
-
-  final String title;
+  Login({Key? key}) : super(key: key);
 
   @override
   LoginMain createState() => LoginMain();
@@ -84,26 +86,29 @@ class LoginUtils {
   Future<String> getResponse(
       String password, String username, bool retryWithShared) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String user = prefs.getString('username') ?? null;
-    String pass = prefs.getString('password') ?? null;
-    if (pass != null && user != null && retryWithShared) {
-      var response = await http
-          .get(SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass);
+    String user = prefs.getString('username') ?? "";
+    String pass = prefs.getString('password') ?? "";
+    if (pass != "" && user != "" && retryWithShared) {
+      var response = await http.get(Uri.parse(
+          SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass));
       return response.body.toString();
     } else if (password == "" || username == "" && retryWithShared == false) {
       print("None");
       return "None";
     } else {
-      var response = await http.get(
-          SERVER_URL_LOGIN + "?username=" + username + "&password=" + password);
+      var response = await http.get(Uri.parse(SERVER_URL_LOGIN +
+          "?username=" +
+          username +
+          "&password=" +
+          password));
       return response.body.toString();
     }
   }
 
   Future<String> startLogin(String user, String pass) async {
-    if (pass != null && user != null) {
-      var response = await http
-          .get(SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass);
+    if (pass != "" && user != "") {
+      var response = await http.get(Uri.parse(
+          SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass));
       return response.body.toString();
     } else {
       return "";
@@ -120,58 +125,57 @@ class LoginMain extends State<Login> {
   final loginutils = LoginUtils();
 
   Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      style: Theme.of(context).textTheme.headline2,
-      textAlign: TextAlign.center,
-      child: FutureBuilder<String>(
-        future: loginutils.getResponse(
-            _passwordController.text,
-            _usernameController.text,
-            retry), // a previously-obtained Future<String> or null
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            var snapdata = snapshot.data;
-            if (snapdata == "None") {
-              children = <Widget>[
-                Container(height: 50),
-                Text(
-                  "OnlinePrinter Login",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    return FutureBuilder<String>(
+      future: loginutils.getResponse(
+          _passwordController.text,
+          _usernameController.text,
+          retry), // a previously-obtained Future<String> or null
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        List<Widget> children;
+        if (snapshot.hasData) {
+          var snapdata = snapshot.data;
+          if (snapdata == "None") {
+            children = <Widget>[
+              Container(height: 50),
+              Text(
+                "OnlinePrinter Login",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              Container(
+                height: 20,
+              ),
+              TextField(
+                obscureText: false,
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Username or E-Mail',
                 ),
-                Container(
-                  height: 20,
+              ),
+              Container(
+                height: 5,
+              ),
+              TextField(
+                obscureText: true,
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
                 ),
-                TextField(
-                  obscureText: false,
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Username or E-Mail',
-                  ),
-                ),
-                Container(
-                  height: 5,
-                ),
-                TextField(
-                  obscureText: true,
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
-                ),
-                Container(
-                  height: 10,
-                ),
-                ElevatedButton(
-                  child: Text("Login"),
-                  onPressed: () {
-                    setState(() {});
-                  },
-                )
-              ];
-            } else {
+              ),
+              Container(
+                height: 10,
+              ),
+              ElevatedButton(
+                child: Text("Login"),
+                onPressed: () {
+                  setState(() {});
+                },
+              )
+            ];
+          } else {
+            String? snapdata = snapshot.data;
+            if (snapdata != null) {
               var jsonL = json.decode(snapdata);
               print(jsonL);
               if (jsonL["responseCode"] == 200) {
@@ -355,38 +359,42 @@ class LoginMain extends State<Login> {
                     ),
                   ),
                 );
+              } else {
+                children = [];
               }
+            } else {
+              children = [];
             }
-          } else if (snapshot.hasError) {
-            children = <Widget>[
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              )
-            ];
-          } else {
-            children = <Widget>[
-              SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ];
           }
-          return Column(
-            children: children,
-          );
-        },
-      ),
+        } else if (snapshot.hasError) {
+          children = <Widget>[
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text('Error: ${snapshot.error}'),
+            )
+          ];
+        } else {
+          children = <Widget>[
+            SizedBox(
+              child: CircularProgressIndicator(),
+              width: 60,
+              height: 60,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('Awaiting result...'),
+            )
+          ];
+        }
+        return Column(
+          children: children,
+        );
+      },
     );
   }
 }

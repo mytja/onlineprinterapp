@@ -6,10 +6,13 @@ import 'order.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatefulWidget {
-  Orders({Key key, this.title, this.username, this.password, this.json})
+  Orders(
+      {Key? key,
+      required this.username,
+      required this.password,
+      required this.json})
       : super(key: key);
 
-  final String title;
   final String username;
   final String password;
   final String json;
@@ -35,6 +38,14 @@ class OrdersMain extends State<Orders> {
     print(jsonOrders);
 
     return MaterialApp(
+        theme: ThemeData(
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             body: Column(children: <Widget>[
               Container(
