@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'constants/constants.dart';
 import 'widgets/drawer.dart';
-import 'old/mjpeg_player.dart';
+import 'mjpeg/mjpeg_player.dart';
 
 class Camera extends StatelessWidget {
   Camera({required this.username, required this.password});
