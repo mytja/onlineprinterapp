@@ -99,7 +99,8 @@ class DashboardMain extends State<Dashboard> {
                 Container(
                   height: 20,
                 ),
-                Row(
+                Card(
+                    child: Row(
                   children: [
                     Container(
                       width: 5,
@@ -119,167 +120,173 @@ class DashboardMain extends State<Dashboard> {
                       ),
                     ),
                   ],
-                ),
+                )),
                 Container(
                   height: 20,
                 ),
-                Container(
-                    height: 20,
-                    child: Center(
-                        child: Text(
-                      'Bed',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ))),
-                Container(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 5,
-                    ),
-                    Container(
-                      width: width / 2 - 5,
-                      child: Text(
-                        'Current temperature',
+                Card(
+                    child: Column(children: [
+                  Container(
+                      height: 20,
+                      child: Center(
+                          child: Text(
+                        'Bed',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      width: width / 2,
-                      child: Text(
-                        jsonL["temp"]["bed"]["current"].toString(),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 5,
-                    ),
-                    Container(
-                      width: width / 2 - 5,
-                      child: Text(
-                        'Target temperature',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      width: width / 2,
-                      child: Text(
-                        jsonL["temp"]["bed"]["target"].toString(),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 10,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Temperature',
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ))),
+                  Container(
+                    height: 10,
                   ),
-                  onSubmitted: (String temp) async {
-                    try {
-                      var temperature = int.parse(temp);
-                      var response = await http.get(Uri.parse(
-                          SERVER_URL_BED_SET +
-                              temperature.toString() +
-                              "?username=" +
-                              widget.username +
-                              "&password=" +
-                              widget.password));
-                      print(response.statusCode);
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 5,
+                      ),
+                      Container(
+                        width: width / 2 - 5,
+                        child: Text(
+                          'Current temperature',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                        width: width / 2,
+                        child: Text(
+                          jsonL["temp"]["bed"]["current"].toString(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 5,
+                      ),
+                      Container(
+                        width: width / 2 - 5,
+                        child: Text(
+                          'Target temperature',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                        width: width / 2,
+                        child: Text(
+                          jsonL["temp"]["bed"]["target"].toString(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 10,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Temperature',
+                    ),
+                    onSubmitted: (String temp) async {
+                      try {
+                        var temperature = int.parse(temp);
+                        var response = await http.get(Uri.parse(
+                            SERVER_URL_BED_SET +
+                                temperature.toString() +
+                                "?username=" +
+                                widget.username +
+                                "&password=" +
+                                widget.password));
+                        print(response.statusCode);
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                  ),
+                ])),
                 Container(
                   height: 20,
                 ),
-                Container(
-                    height: 20,
-                    child: Center(
-                        child: Text(
-                      'Nozzle',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ))),
-                Container(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 5,
-                    ),
-                    Container(
-                      width: width / 2 - 5,
-                      child: Text(
-                        'Current temperature',
+                Card(
+                    child: Column(children: [
+                  Container(
+                      height: 20,
+                      child: Center(
+                          child: Text(
+                        'Nozzle',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      width: width / 2,
-                      child: Text(
-                        jsonL["temp"]["nozzle"]["current"].toString(),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 5,
-                    ),
-                    Container(
-                      width: width / 2 - 5,
-                      child: Text(
-                        'Target temperature',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      width: width / 2,
-                      child: Text(
-                        jsonL["temp"]["nozzle"]["target"].toString(),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 10,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Temperature',
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ))),
+                  Container(
+                    height: 10,
                   ),
-                  onSubmitted: (String temp) async {
-                    try {
-                      var temperature = int.parse(temp);
-                      var response = await http.get(Uri.parse(
-                          SERVER_URL_NOZZLE_SET +
-                              temperature.toString() +
-                              "?username=" +
-                              widget.username +
-                              "&password=" +
-                              widget.password));
-                      print(response.statusCode);
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 5,
+                      ),
+                      Container(
+                        width: width / 2 - 5,
+                        child: Text(
+                          'Current temperature',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                        width: width / 2,
+                        child: Text(
+                          jsonL["temp"]["nozzle"]["current"].toString(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 5,
+                      ),
+                      Container(
+                        width: width / 2 - 5,
+                        child: Text(
+                          'Target temperature',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                        width: width / 2,
+                        child: Text(
+                          jsonL["temp"]["nozzle"]["target"].toString(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 10,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Temperature',
+                    ),
+                    onSubmitted: (String temp) async {
+                      try {
+                        var temperature = int.parse(temp);
+                        var response = await http.get(Uri.parse(
+                            SERVER_URL_NOZZLE_SET +
+                                temperature.toString() +
+                                "?username=" +
+                                widget.username +
+                                "&password=" +
+                                widget.password));
+                        print(response.statusCode);
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                  )
+                ]))
               ];
             } else {
               children = [];
