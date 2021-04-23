@@ -15,7 +15,7 @@ class MjpegView extends StatefulWidget {
 }
 
 class MjpegViewState extends State<MjpegView> {
-  late Image mjpeg;
+  Image? mjpeg;
   var imgBuf;
   Stopwatch timer = Stopwatch();
 
@@ -62,7 +62,7 @@ class MjpegViewState extends State<MjpegView> {
             imgBuf = List<int>.from(buf.getRange(startIndex, endIndex + 2));
             mjpeg = Image.memory(Uint8List.fromList(imgBuf));
 
-            precacheImage(mjpeg.image, context);
+            precacheImage(mjpeg!.image, context);
 
             Future.delayed(const Duration(milliseconds: 100)).then((_) {
               if (mounted) setState(() {});
@@ -90,6 +90,10 @@ class MjpegViewState extends State<MjpegView> {
 
   @override
   Widget build(BuildContext context) {
-    return mjpeg != null ? mjpeg : Center(child: CircularProgressIndicator());
+    if (mjpeg == null) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return Container(child: mjpeg);
+    }
   }
 }
