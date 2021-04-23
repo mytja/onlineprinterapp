@@ -64,7 +64,6 @@ class DashboardMain extends State<Dashboard> {
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return FutureBuilder<String>(
         future: getPrinter(), // a previously-obtained Future<String> or null
@@ -106,7 +105,7 @@ class DashboardMain extends State<Dashboard> {
                       width: 5,
                     ),
                     Container(
-                      width: width / 2 - 5,
+                      width: width / 2 - 5 - 4,
                       child: Text(
                         'Status',
                         style: TextStyle(
@@ -114,7 +113,7 @@ class DashboardMain extends State<Dashboard> {
                       ),
                     ),
                     Container(
-                      width: width / 2,
+                      width: width / 2 - 4,
                       child: Text(
                         jsonL["status"].toString(),
                       ),
@@ -143,7 +142,7 @@ class DashboardMain extends State<Dashboard> {
                         width: 5,
                       ),
                       Container(
-                        width: width / 2 - 5,
+                        width: width / 2 - 5 - 4,
                         child: Text(
                           'Current temperature',
                           style: TextStyle(
@@ -151,7 +150,7 @@ class DashboardMain extends State<Dashboard> {
                         ),
                       ),
                       Container(
-                        width: width / 2,
+                        width: width / 2 - 4,
                         child: Text(
                           jsonL["temp"]["bed"]["current"].toString(),
                         ),
@@ -164,7 +163,7 @@ class DashboardMain extends State<Dashboard> {
                         width: 5,
                       ),
                       Container(
-                        width: width / 2 - 5,
+                        width: width / 2 - 5 - 4,
                         child: Text(
                           'Target temperature',
                           style: TextStyle(
@@ -172,7 +171,7 @@ class DashboardMain extends State<Dashboard> {
                         ),
                       ),
                       Container(
-                        width: width / 2,
+                        width: width / 2 - 4,
                         child: Text(
                           jsonL["temp"]["bed"]["target"].toString(),
                         ),
@@ -226,7 +225,7 @@ class DashboardMain extends State<Dashboard> {
                         width: 5,
                       ),
                       Container(
-                        width: width / 2 - 5,
+                        width: width / 2 - 5 - 4,
                         child: Text(
                           'Current temperature',
                           style: TextStyle(
@@ -234,7 +233,7 @@ class DashboardMain extends State<Dashboard> {
                         ),
                       ),
                       Container(
-                        width: width / 2,
+                        width: width / 2 - 4,
                         child: Text(
                           jsonL["temp"]["nozzle"]["current"].toString(),
                         ),
@@ -247,7 +246,7 @@ class DashboardMain extends State<Dashboard> {
                         width: 5,
                       ),
                       Container(
-                        width: width / 2 - 5,
+                        width: width / 2 - 5 - 4,
                         child: Text(
                           'Target temperature',
                           style: TextStyle(
@@ -255,7 +254,7 @@ class DashboardMain extends State<Dashboard> {
                         ),
                       ),
                       Container(
-                        width: width / 2,
+                        width: width / 2 - 4,
                         child: Text(
                           jsonL["temp"]["nozzle"]["target"].toString(),
                         ),
@@ -307,6 +306,8 @@ class DashboardMain extends State<Dashboard> {
             children = <Widget>[waiting.waiting()];
           }
           return ListView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: children,
           );
         });

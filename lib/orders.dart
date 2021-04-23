@@ -30,7 +30,6 @@ class OrdersMain extends State<Orders> {
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     var jsonL = json.decode(widget.json);
     var jsonOrders = jsonL["orders"];

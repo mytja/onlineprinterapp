@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-String SERVER_URL = "http://83.212.127.208:5000/";
+String SERVER_URL = "";
 String SERVER_URL_API = SERVER_URL + "api";
 String SERVER_URL_LOGIN = SERVER_URL + "api/auth/login";
 String SERVER_URL_ORDERS = SERVER_URL + "api/orders/getAll";

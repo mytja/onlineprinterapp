@@ -49,12 +49,37 @@ class Settings extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class SettingsMain extends State<Settings> {
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Invalid URL'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('You entered invalid URL.'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   Widget build(BuildContext context) {
     String url = widget.sp.getString('url') ?? "";
     print(url);
 
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return Column(children: [
       Container(
@@ -79,11 +104,15 @@ class SettingsMain extends State<Settings> {
                     hintText: url),
                 onSubmitted: (String text) async {
                   if (Uri.parse(text).isAbsolute == true) {
-                    SharedPreferences sp = widget.sp;
-                    await sp.setString('url', text);
+                    SharedPreferences sp =
+                        await SharedPreferences.getInstance();
+                    if (text.substring(text.length - 1) != "/") {
+                      text += "/";
+                    }
+                    await sp.setString("url", text + "/");
                     updateVars(text);
                   } else {
-                    print("Not setting a url");
+                    _showMyDialog();
                   }
                 },
               ))
