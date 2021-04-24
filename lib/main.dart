@@ -1,91 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:onlineprinterapp/dashboard.dart';
-import 'package:http/http.dart' as http;
-import 'package:onlineprinterapp/settings.dart';
-import 'package:onlineprinterapp/widgets/backbutton.dart';
+import 'package:onlineprinterapp/splashscreen.dart';
 import 'package:onlineprinterapp/widgets/drawer.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
-import 'constants/constants.dart';
+import 'package:onlineprinterapp/constants/constants.dart';
+
+import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Splash.preload();
 
-  final loginutils = LoginUtils();
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? url = prefs.getString("url");
-
-  if (url != null) {
-    updateVars(url);
-  }
-
-  if (SERVER_URL != "") {
-    String user = prefs.getString('username') ?? "";
-    String pass = prefs.getString('password') ?? "";
-    String response = await loginutils.startLogin(user, pass);
-    if (response != "") {
-      var jsonL = json.decode(response);
-      if (jsonL["responseCode"] == 200) {
-        runApp(MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(title: Text("OnlinePrinterApp")),
-            drawer: PrinterDrawer(password: pass, username: user),
-            body: Dashboard(password: pass, username: user),
-          ),
-          theme: Themes.LightTheme(),
-          darkTheme: Themes.DarkTheme(),
-          themeMode: Themes.Theme(),
-          debugShowCheckedModeBanner: false,
-        ));
-      } else {
-        runApp(MaterialApp(
-          title: 'OnlinePrinterApp',
-          home: Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: Login(),
-              appBar: AppBar(
-                title: Text("OnlinePrinterApp"),
-              ),
-              drawer: SettingsDrawer()),
-          theme: Themes.LightTheme(),
-          darkTheme: Themes.DarkTheme(),
-          themeMode: Themes.Theme(),
-          debugShowCheckedModeBanner: false,
-        ));
-      }
-    } else {
-      runApp(MaterialApp(
-        title: 'OnlinePrinterApp',
-        home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Login(),
-            appBar: AppBar(
-              title: Text("OnlinePrinterApp"),
-            ),
-            drawer: SettingsDrawer()),
-        theme: Themes.LightTheme(),
-        darkTheme: Themes.DarkTheme(),
-        themeMode: Themes.Theme(),
-        debugShowCheckedModeBanner: false,
-      ));
-    }
-  } else {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    runApp(MaterialApp(
-        theme: Themes.LightTheme(),
-        darkTheme: Themes.DarkTheme(),
-        themeMode: Themes.Theme(),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          appBar:
-              AppBar(title: Text("OnlinePrinterApp"), leading: BackButtonTop()),
-          body: Settings(sp: sp),
-        )));
-  }
+  runApp(WaitingApp());
 }
 
 class App extends StatelessWidget {
@@ -156,6 +87,53 @@ class LoginMain extends State<Login> {
 
   final loginutils = LoginUtils();
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Wrong login info'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('403 - Forbidden'),
+                Text('You entered wrong login info.')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> loginCheck(
+      Map<String, dynamic> jsonL, BuildContext context) async {
+    if (jsonL["responseCode"] == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("username", _usernameController.text);
+      await prefs.setString("password", _passwordController.text);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DApp(
+                username: _usernameController.text,
+                password: _passwordController.text)),
+      );
+    } else {
+      _showMyDialog();
+    }
+  }
+
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Container(height: 50),
@@ -179,15 +157,7 @@ class LoginMain extends State<Login> {
             String login = await loginutils.startLogin(
                 _usernameController.text, _passwordController.text);
             var jsonL = json.decode(login);
-            if (jsonL["responseCode"] == 200) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DApp(
-                        username: _usernameController.text,
-                        password: _passwordController.text)),
-              );
-            }
+            await loginCheck(jsonL, context);
           }
         },
       ),
@@ -207,15 +177,7 @@ class LoginMain extends State<Login> {
             String login = await loginutils.startLogin(
                 _usernameController.text, _passwordController.text);
             var jsonL = json.decode(login);
-            if (jsonL["responseCode"] == 200) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DApp(
-                        username: _usernameController.text,
-                        password: _passwordController.text)),
-              );
-            }
+            await loginCheck(jsonL, context);
           }
         },
       ),
@@ -230,15 +192,7 @@ class LoginMain extends State<Login> {
             String login = await loginutils.startLogin(
                 _usernameController.text, _passwordController.text);
             var jsonL = json.decode(login);
-            if (jsonL["responseCode"] == 200) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DApp(
-                        username: _usernameController.text,
-                        password: _passwordController.text)),
-              );
-            }
+            await loginCheck(jsonL, context);
           }
         },
       )
