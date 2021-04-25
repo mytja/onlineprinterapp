@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/about.dart';
 import 'package:onlineprinterapp/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/constants.dart';
@@ -113,6 +116,19 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
                         password: widget.password,
                         sp: prefs)),
               );
+            },
+          ),
+          ListTile(
+            title: Text('About'),
+            onTap: () async {
+              http.Response response = await http
+                  .get(Uri.parse("https://api.github.com/repos/mytja/RGBApp"));
+              String text = response.body.toString();
+              Map<String, dynamic> jsonL = json.decode(text);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => About(projectJSON: jsonL)));
             },
           ),
           Spacer(),
