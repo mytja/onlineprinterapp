@@ -27,9 +27,9 @@ class Background {
       String user = prefs.getString('username') ?? "";
       String pass = prefs.getString('password') ?? "";
       String response = await loginutils.startLogin(user, pass);
-      print(response);
-      print(pass);
-      print(user);
+      //print(response);
+      //print(pass);
+      //print(user);
       if (response != "") {
         var jsonL = json.decode(response);
         if (jsonL["responseCode"] == 200) {
