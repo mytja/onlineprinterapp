@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants/constants.dart';
 
@@ -12,13 +13,9 @@ class Setting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        themeMode: ThemeMode.system,
+        theme: Themes.LightTheme(),
+        darkTheme: Themes.DarkTheme(),
+        themeMode: Themes.Theme(),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
@@ -81,43 +78,45 @@ class SettingsMain extends State<Settings> {
 
     double width = MediaQuery.of(context).size.width;
 
-    return Column(children: [
-      Container(
-        height: 10,
-      ),
-      Row(
+    return ListView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: [
           Container(
-            width: 10,
+            height: 10,
           ),
-          Text("URL", style: TextStyle(fontSize: 20)),
-          Container(
-            width: 10,
-          ),
-          Container(
-              width: width / 10 * 8,
-              child: TextField(
-                obscureText: false,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'URL',
-                    hintText: url),
-                onSubmitted: (String text) async {
-                  if (Uri.parse(text).isAbsolute == true) {
-                    SharedPreferences sp =
-                        await SharedPreferences.getInstance();
-                    if (text.substring(text.length - 1) != "/") {
-                      text += "/";
-                    }
-                    await sp.setString("url", text + "/");
-                    updateVars(text);
-                  } else {
-                    _showMyDialog();
-                  }
-                },
-              ))
-        ],
-      )
-    ]);
+          Row(
+            children: [
+              Container(
+                width: 10,
+              ),
+              Text("URL", style: TextStyle(fontSize: 20)),
+              Container(
+                width: 10,
+              ),
+              Container(
+                  width: width / 10 * 8,
+                  child: TextField(
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'URL',
+                        hintText: url),
+                    onSubmitted: (String text) async {
+                      if (Uri.parse(text).isAbsolute == true) {
+                        SharedPreferences sp =
+                            await SharedPreferences.getInstance();
+                        if (text.substring(text.length - 1) != "/") {
+                          text += "/";
+                        }
+                        await sp.setString("url", text + "/");
+                        updateVars(text);
+                      } else {
+                        _showMyDialog();
+                      }
+                    },
+                  ))
+            ],
+          )
+        ]);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'constants/constants.dart';
 
 import 'printerror.dart';
@@ -46,13 +47,9 @@ class OrderMain extends State<Order> {
     double width = MediaQuery.of(context).size.width;
 
     return MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        themeMode: ThemeMode.system,
+        theme: Themes.LightTheme(),
+        darkTheme: Themes.DarkTheme(),
+        themeMode: Themes.Theme(),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
@@ -179,11 +176,12 @@ class OrderMain extends State<Order> {
                   Container(
                     height: 20,
                   ),
-                  SizedBox(
+                  Center(
+                      child: SizedBox(
                     child: CircularProgressIndicator(),
                     width: 60,
                     height: 60,
-                  ),
+                  )),
                   const Padding(
                     padding: EdgeInsets.only(top: 16),
                     child: Text('Awaiting result...'),
@@ -191,7 +189,9 @@ class OrderMain extends State<Order> {
                 ];
               }
               return Center(
-                child: Column(
+                child: ListView(
+                  physics: BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   children: children,
                 ),
               );

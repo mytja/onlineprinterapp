@@ -48,6 +48,34 @@ class Dashboard extends StatefulWidget {
 class DashboardMain extends State<Dashboard> {
   final waiting = Waiting();
 
+  Future<void> _showMyDialog(int statusCode, String response) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Abort print'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(response),
+                Text(statusCode.toString()),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -57,20 +85,25 @@ class DashboardMain extends State<Dashboard> {
     });
   }
 
-  Future<String> getPrinter() async {
-    var response = await http.get(Uri.parse(SERVER_URL_PRINTER));
-    return response.body.toString();
+  Future<List<String>> getPrinter() async {
+    var printer = await http.get(Uri.parse(SERVER_URL_PRINTER));
+    var canAbort = await http.get(Uri.parse(SERVER_URL_ABORT_PRINT_CHECK +
+        "?username=" +
+        widget.username +
+        "&password=" +
+        widget.password));
+    return [printer.body.toString(), canAbort.body.toString()];
   }
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    return FutureBuilder<String>(
-        future: getPrinter(), // a previously-obtained Future<String> or null
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+    return FutureBuilder(
+        future: getPrinter(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            String? snapdata = snapshot.data;
+            String? snapdata = snapshot.data[0];
             if (snapdata != null) {
               var jsonL = json.decode(snapdata);
               children = <Widget>[
@@ -285,7 +318,47 @@ class DashboardMain extends State<Dashboard> {
                       }
                     },
                   )
-                ]))
+                ])),
+                (() {
+                  bool canAbort = false;
+                  try {
+                    canAbort = json.decode(snapshot.data[1])["canAbort"];
+                  } catch (e) {
+                    canAbort = false;
+                  }
+                  if (canAbort == true) {
+                    return Card(
+                        child: Column(children: [
+                      Container(
+                          height: 20,
+                          child: Center(
+                              child: Text(
+                            'Print',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ))),
+                      Container(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                          child: Text("Abort print"),
+                          onPressed: () async {
+                            http.Response response = await http.get(Uri.parse(
+                                SERVER_URL_ABORT_PRINT +
+                                    "?username=" +
+                                    widget.username +
+                                    "&password=" +
+                                    widget.password));
+                            print(response.body.toString());
+                            print(response.statusCode);
+                            _showMyDialog(
+                                response.statusCode, response.body.toString());
+                          }),
+                    ]));
+                  } else {
+                    return Container(height: 1);
+                  }
+                }())
               ];
             } else {
               children = [];

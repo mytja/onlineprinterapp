@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/widgets/themedata.dart';
 
 import 'constants/constants.dart';
 import 'widgets/drawer.dart';
@@ -15,13 +16,9 @@ class Camera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        themeMode: ThemeMode.system,
+        theme: Themes.LightTheme(),
+        darkTheme: Themes.DarkTheme(),
+        themeMode: Themes.Theme(),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(title: Text("OnlinePrinterApp")),
@@ -54,19 +51,22 @@ class CameraStreamMain extends State<CameraStream> {
         Platform.isWindows ||
         Platform.isMacOS) {
       return Center(
-          child: ListView(children: [
-        Container(
-          height: 30,
-        ),
-        Center(
-            child: Text(
-          "Webcam Stream: ",
-          style: TextStyle(fontSize: 26),
-        )),
-        MjpegView(
-          url: SERVER_URL_WEBCAM,
-        )
-      ]));
+          child: ListView(
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              children: [
+            Container(
+              height: 30,
+            ),
+            Center(
+                child: Text(
+              "Webcam Stream: ",
+              style: TextStyle(fontSize: 26),
+            )),
+            MjpegView(
+              url: SERVER_URL_WEBCAM,
+            )
+          ]));
     } else {
       return Center(
           child: ListView(children: [

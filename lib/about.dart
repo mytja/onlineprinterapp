@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/constants/constants.dart';
 import 'package:onlineprinterapp/widgets/backbutton.dart';
+import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
@@ -11,17 +13,15 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("OnlinePrinterApp")),
-        drawer: BackButtonTop(),
+        appBar: AppBar(
+          title: Text("OnlinePrinterApp"),
+          leading: BackButtonTop(),
+        ),
         body: AboutState(projectJSON: projectJSON),
       ),
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      themeMode: ThemeMode.system,
+      theme: Themes.LightTheme(),
+      darkTheme: Themes.DarkTheme(),
+      themeMode: Themes.Theme(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -65,6 +65,8 @@ class AboutScreen extends State<AboutState> {
                         widget.projectJSON["forks_count"].toString() +
                             " fork(s)",
                         style: TextStyle(fontSize: 18, color: Colors.grey)),
+                    Text(VERSION,
+                        style: TextStyle(fontSize: 18, color: Colors.grey)),
                   ],
                 )
               ]),
@@ -73,9 +75,9 @@ class AboutScreen extends State<AboutState> {
         ),
         GestureDetector(
             onTap: () async {
-              await canLaunch("https://github.com/mytja")
-                  ? await launch("https://github.com/mytja")
-                  : null;
+              if (await canLaunch("https://github.com/mytja")) {
+                await launch("https://github.com/mytja");
+              }
             },
             child: Card(
               child: Column(

@@ -135,67 +135,69 @@ class LoginMain extends State<Login> {
   }
 
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Container(height: 50),
-      Text(
-        "OnlinePrinter Login",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-      ),
-      Container(
-        height: 20,
-      ),
-      TextField(
-        obscureText: false,
-        controller: _usernameController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Username or E-Mail',
-        ),
-        onSubmitted: (String text) async {
-          if (_usernameController.text != "" &&
-              _passwordController.text != "") {
-            String login = await loginutils.startLogin(
-                _usernameController.text, _passwordController.text);
-            var jsonL = json.decode(login);
-            await loginCheck(jsonL, context);
-          }
-        },
-      ),
-      Container(
-        height: 5,
-      ),
-      TextField(
-        obscureText: true,
-        controller: _passwordController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Password',
-        ),
-        onSubmitted: (String text) async {
-          if (_usernameController.text != "" &&
-              _passwordController.text != "") {
-            String login = await loginutils.startLogin(
-                _usernameController.text, _passwordController.text);
-            var jsonL = json.decode(login);
-            await loginCheck(jsonL, context);
-          }
-        },
-      ),
-      Container(
-        height: 10,
-      ),
-      ElevatedButton(
-        child: Text("Login"),
-        onPressed: () async {
-          if (_usernameController.text != "" &&
-              _passwordController.text != "") {
-            String login = await loginutils.startLogin(
-                _usernameController.text, _passwordController.text);
-            var jsonL = json.decode(login);
-            await loginCheck(jsonL, context);
-          }
-        },
-      )
-    ]);
+    return ListView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        children: <Widget>[
+          Container(height: 50),
+          Text(
+            "OnlinePrinter Login",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          Container(
+            height: 20,
+          ),
+          TextField(
+            obscureText: false,
+            controller: _usernameController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Username or E-Mail',
+            ),
+            onSubmitted: (String text) async {
+              if (_usernameController.text != "" &&
+                  _passwordController.text != "") {
+                String login = await loginutils.startLogin(
+                    _usernameController.text, _passwordController.text);
+                var jsonL = json.decode(login);
+                await loginCheck(jsonL, context);
+              }
+            },
+          ),
+          Container(
+            height: 5,
+          ),
+          TextField(
+            obscureText: true,
+            controller: _passwordController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+            ),
+            onSubmitted: (String text) async {
+              if (_usernameController.text != "" &&
+                  _passwordController.text != "") {
+                String login = await loginutils.startLogin(
+                    _usernameController.text, _passwordController.text);
+                var jsonL = json.decode(login);
+                await loginCheck(jsonL, context);
+              }
+            },
+          ),
+          Container(
+            height: 10,
+          ),
+          ElevatedButton(
+            child: Text("Login"),
+            onPressed: () async {
+              if (_usernameController.text != "" &&
+                  _passwordController.text != "") {
+                String login = await loginutils.startLogin(
+                    _usernameController.text, _passwordController.text);
+                var jsonL = json.decode(login);
+                await loginCheck(jsonL, context);
+              }
+            },
+          )
+        ]);
   }
 }

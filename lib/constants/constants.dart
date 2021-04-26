@@ -10,6 +10,9 @@ String SERVER_URL_PRINTER = SERVER_URL + "api/printer";
 String SERVER_URL_BED_SET = SERVER_URL + "api/printer/bed/";
 String SERVER_URL_WEBCAM = SERVER_URL + "webcam/stream";
 String SERVER_URL_NOZZLE_SET = SERVER_URL + "api/printer/tool/";
+String SERVER_URL_ABORT_PRINT = SERVER_URL + "api/order/abort";
+String SERVER_URL_ABORT_PRINT_CHECK = SERVER_URL + "api/order/abort/check";
+const String VERSION = "Beta 1.1";
 
 void updateVars(String baseURL) {
   print(baseURL);
@@ -24,5 +27,7 @@ void updateVars(String baseURL) {
     SERVER_URL_BED_SET = SERVER_URL + "api/printer/bed/";
     SERVER_URL_WEBCAM = SERVER_URL + "webcam/stream";
     SERVER_URL_NOZZLE_SET = SERVER_URL + "api/printer/tool/";
+    SERVER_URL_ABORT_PRINT = SERVER_URL + "api/order/abort";
+    SERVER_URL_ABORT_PRINT_CHECK = SERVER_URL + "api/order/abort/check";
   }
 }
