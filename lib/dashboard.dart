@@ -96,11 +96,16 @@ class DashboardWidget {
                               ),
                             ),
                             Container(
-                              width: width / 2 - 4,
-                              child: Text(
-                                jsonL["status"].toString(),
-                              ),
-                            ),
+                                width: width / 2 - 4,
+                                child: (() {
+                                  if (jsonL != {} ||
+                                      jsonL != null ||
+                                      jsonL["status"] != null) {
+                                    return Text(
+                                      jsonL["status"].toString(),
+                                    );
+                                  }
+                                }())),
                           ],
                         )),
                         Container(
@@ -135,9 +140,18 @@ class DashboardWidget {
                               ),
                               Container(
                                 width: width / 2 - 4,
-                                child: Text(
-                                  jsonL["temp"]["bed"]["current"].toString(),
-                                ),
+                                child: Container(
+                                    width: width / 2 - 4,
+                                    child: (() {
+                                      if (jsonL != {} ||
+                                          jsonL != null ||
+                                          jsonL["temp"] != null) {
+                                        return Text(
+                                          jsonL["temp"]["bed"]["current"]
+                                              .toString(),
+                                        );
+                                      }
+                                    }())),
                               ),
                             ],
                           ),
@@ -156,11 +170,17 @@ class DashboardWidget {
                                 ),
                               ),
                               Container(
-                                width: width / 2 - 4,
-                                child: Text(
-                                  jsonL["temp"]["bed"]["target"].toString(),
-                                ),
-                              ),
+                                  width: width / 2 - 4,
+                                  child: (() {
+                                    if (jsonL != {} ||
+                                        jsonL != null ||
+                                        jsonL["temp"] != null) {
+                                      return Text(
+                                        jsonL["temp"]["bed"]["target"]
+                                            .toString(),
+                                      );
+                                    }
+                                  }())),
                             ],
                           ),
                           Container(
@@ -219,11 +239,17 @@ class DashboardWidget {
                                 ),
                               ),
                               Container(
-                                width: width / 2 - 4,
-                                child: Text(
-                                  jsonL["temp"]["nozzle"]["current"].toString(),
-                                ),
-                              ),
+                                  width: width / 2 - 4,
+                                  child: (() {
+                                    if (jsonL != {} ||
+                                        jsonL != null ||
+                                        jsonL["temp"] != null) {
+                                      return Text(
+                                        jsonL["temp"]["nozzle"]["current"]
+                                            .toString(),
+                                      );
+                                    }
+                                  }())),
                             ],
                           ),
                           Row(
@@ -242,9 +268,18 @@ class DashboardWidget {
                               ),
                               Container(
                                 width: width / 2 - 4,
-                                child: Text(
-                                  jsonL["temp"]["nozzle"]["target"].toString(),
-                                ),
+                                child: Container(
+                                    width: width / 2 - 4,
+                                    child: (() {
+                                      if (jsonL != {} ||
+                                          jsonL != null ||
+                                          jsonL["temp"] != null) {
+                                        return Text(
+                                          jsonL["temp"]["nozzle"]["target"]
+                                              .toString(),
+                                        );
+                                      }
+                                    }())),
                               ),
                             ],
                           ),

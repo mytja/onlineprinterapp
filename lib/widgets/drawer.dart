@@ -66,56 +66,56 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
           ListTile(
             title: Text("Dashboard"),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Dashboard(
-                          username: widget.username,
-                          password: widget.password,
-                        )),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Dashboard(
+                            username: widget.username,
+                            password: widget.password,
+                          )),
+                  ModalRoute.withName("/dashboard"));
             },
           ),
           ListTile(
             title: Text('Orders'),
             onTap: () async {
               var r = await getOrders(widget.password, widget.username);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Orders(
-                          username: widget.username,
-                          password: widget.password,
-                          json: r,
-                        )),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Orders(
+                            username: widget.username,
+                            password: widget.password,
+                            json: r,
+                          )),
+                  ModalRoute.withName("/orders"));
             },
           ),
           ListTile(
             title: Text('Camera Stream'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Camera(
-                          username: widget.username,
-                          password: widget.password,
-                        )),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Camera(
+                            username: widget.username,
+                            password: widget.password,
+                          )),
+                  ModalRoute.withName("/camera"));
             },
           ),
           ListTile(
             title: Text('Settings'),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Setting(
-                        username: widget.username,
-                        password: widget.password,
-                        sp: prefs)),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Setting(
+                          username: widget.username,
+                          password: widget.password,
+                          sp: prefs)),
+                  ModalRoute.withName("/settings"));
             },
           ),
           ListTile(
@@ -125,14 +125,15 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
                   "https://api.github.com/repos/mytja/onlineprinterapp"));
               String text = response.body.toString();
               Map<String, dynamic> jsonL = json.decode(text);
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                       builder: (context) => About(
-                            projectJSON: jsonL,
                             username: widget.username,
                             password: widget.password,
-                          )));
+                            projectJSON: jsonL,
+                          )),
+                  ModalRoute.withName("/about"));
             },
           ),
           Spacer(),
@@ -142,10 +143,10 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               prefs.remove("username");
               prefs.remove("password");
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => App()),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => App()),
+                  ModalRoute.withName("/login"));
             },
           ),
         ],
