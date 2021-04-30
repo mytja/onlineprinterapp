@@ -2,6 +2,7 @@ import 'dart:async' show Completer;
 import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/backgroundRun.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
+import 'package:onlineprinterapp/widgets/waiting.dart';
 
 class Splash extends StatelessWidget {
   static AssetImage _getAssetImage() => AssetImage('assets/logo-small.png');
@@ -21,9 +22,7 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Image(image: _getAssetImage())),
-    );
+    return Center(child: Image(image: _getAssetImage()));
   }
 }
 
@@ -34,7 +33,7 @@ class WaitingApp extends StatelessWidget {
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return MaterialApp(
-            home: Splash(),
+            home: Scaffold(body: Splash()),
             theme: Themes.LightTheme(),
             darkTheme: Themes.DarkTheme(),
             themeMode: Themes.Theme(),
@@ -43,6 +42,19 @@ class WaitingApp extends StatelessWidget {
           return snapshot.data;
         }
       },
+    );
+  }
+}
+
+class DashboardSplashScreen extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+          body:
+              ListView(children: [Splash(), Container(height: 20), Waiting()])),
+      theme: Themes.LightTheme(),
+      darkTheme: Themes.DarkTheme(),
+      themeMode: Themes.Theme(),
     );
   }
 }

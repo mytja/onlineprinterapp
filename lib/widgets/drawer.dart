@@ -69,7 +69,7 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DApp(
+                    builder: (context) => Dashboard(
                           username: widget.username,
                           password: widget.password,
                         )),
@@ -121,14 +121,18 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
           ListTile(
             title: Text('About'),
             onTap: () async {
-              http.Response response = await http
-                  .get(Uri.parse("https://api.github.com/repos/mytja/RGBApp"));
+              http.Response response = await http.get(Uri.parse(
+                  "https://api.github.com/repos/mytja/onlineprinterapp"));
               String text = response.body.toString();
               Map<String, dynamic> jsonL = json.decode(text);
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => About(projectJSON: jsonL)));
+                      builder: (context) => About(
+                            projectJSON: jsonL,
+                            username: widget.username,
+                            password: widget.password,
+                          )));
             },
           ),
           Spacer(),

@@ -26,24 +26,14 @@ class Background {
     if (SERVER_URL != "") {
       String user = prefs.getString('username') ?? "";
       String pass = prefs.getString('password') ?? "";
-      String response = await loginutils.startLogin(user, pass);
+      String response = await loginutils.startLogin(user, pass, true);
       //print(response);
       //print(pass);
       //print(user);
       if (response != "") {
         var jsonL = json.decode(response);
         if (jsonL["responseCode"] == 200) {
-          return MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(title: Text("OnlinePrinterApp")),
-              drawer: PrinterDrawer(password: pass, username: user),
-              body: Dashboard(password: pass, username: user),
-            ),
-            theme: Themes.LightTheme(),
-            darkTheme: Themes.DarkTheme(),
-            themeMode: Themes.Theme(),
-            debugShowCheckedModeBanner: false,
-          );
+          return MaterialApp(home: Dashboard(password: pass, username: user));
         } else {
           return MaterialApp(
             title: 'OnlinePrinterApp',

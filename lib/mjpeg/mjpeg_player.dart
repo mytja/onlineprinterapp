@@ -93,7 +93,7 @@ class MjpegViewState extends State<MjpegView> {
     if (mjpeg == null) {
       return Center(child: CircularProgressIndicator());
     } else {
-      return Container(child: mjpeg);
+      return Center(child: mjpeg);
     }
   }
 }

@@ -5,9 +5,14 @@ import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
-  About({required this.projectJSON});
+  About(
+      {required this.projectJSON,
+      required this.password,
+      required this.username});
 
   final Map<String, dynamic> projectJSON;
+  final String username;
+  final String password;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class About extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text("OnlinePrinterApp"),
-          leading: BackButtonTop(),
+          leading: BackButtonDashboard(password: password, username: username),
         ),
         body: AboutState(projectJSON: projectJSON),
       ),
@@ -44,6 +49,30 @@ class AboutScreen extends State<AboutState> {
     return ListView(
       physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
+        Center(child: Text("OnlinePrinterApp", style: TextStyle(fontSize: 25))),
+        Card(
+          child: Column(
+            children: [
+              Center(
+                  child: Text("Project description",
+                      style: TextStyle(fontSize: 25))),
+              Container(height: 10),
+              Row(children: [
+                Container(
+                    width: width / 5,
+                    child: Image.asset("assets/logo-small.png")),
+                Container(width: 5),
+                Column(
+                  children: [
+                    Text(
+                      "OnlinePrinterApp is an offical app \nfor OnlinePrinter API. \nIt is maintained by @mytja \nand written in Flutter",
+                    ),
+                  ],
+                )
+              ]),
+            ],
+          ),
+        ),
         Card(
           child: Column(
             children: [
@@ -73,6 +102,7 @@ class AboutScreen extends State<AboutState> {
             ],
           ),
         ),
+        Center(child: Text("The developers", style: TextStyle(fontSize: 25))),
         GestureDetector(
             onTap: () async {
               if (await canLaunch("https://github.com/mytja")) {
@@ -102,6 +132,30 @@ class AboutScreen extends State<AboutState> {
                 ],
               ),
             )),
+        Center(child: Text("OnlinePrinter", style: TextStyle(fontSize: 25))),
+        Card(
+          child: Column(
+            children: [
+              Center(
+                  child: Text("OnlinePrinter Project",
+                      style: TextStyle(fontSize: 25))),
+              Container(height: 10),
+              Row(children: [
+                Container(
+                    width: width / 5,
+                    child: Image.asset("assets/logo-small.png")),
+                Container(width: 5),
+                Column(
+                  children: [
+                    Text(
+                      "OnlinePrinter is a interface between \nyour OctoPrint Platform and your browser. \nIt is simple to use, is written \nin Flask and actively maintained",
+                    ),
+                  ],
+                )
+              ]),
+            ],
+          ),
+        ),
       ],
     );
   }

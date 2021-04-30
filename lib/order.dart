@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'constants/constants.dart';
 
@@ -157,20 +158,7 @@ class OrderMain extends State<Order> {
                   children = [];
                 }
               } else if (snapshot.hasError) {
-                children = <Widget>[
-                  Container(
-                    height: 20,
-                  ),
-                  Icon(
-                    Icons.error_outline,
-                    color: Colors.red,
-                    size: 60,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text('Error: ${snapshot.error}'),
-                  )
-                ];
+                children = Exception.exception(snapshot.error);
               } else {
                 children = <Widget>[
                   Container(

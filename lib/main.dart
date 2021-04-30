@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:onlineprinterapp/dashboard.dart';
-import 'package:onlineprinterapp/splashscreen.dart';
+import 'package:onlineprinterapp/widgets/splashscreen.dart';
 import 'package:onlineprinterapp/widgets/drawer.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'package:onlineprinterapp/constants/constants.dart';
@@ -68,8 +68,13 @@ class LoginUtils {
     }
   }
 
-  Future<String> startLogin(String user, String pass) async {
+  Future<String> startLogin(String user, String pass, bool prefed) async {
     if (pass != "" && user != "") {
+      if (!prefed) {
+        List<int> bytes = utf8.encode(pass);
+        pass = base64.encode(bytes);
+      }
+
       var response = await http.get(Uri.parse(
           SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass));
       return response.body.toString();
@@ -119,15 +124,18 @@ class LoginMain extends State<Login> {
       Map<String, dynamic> jsonL, BuildContext context) async {
     if (jsonL["responseCode"] == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      List<int> bytes = utf8.encode(_passwordController.text);
+      String password = base64.encode(bytes);
+
       await prefs.setString("username", _usernameController.text);
-      await prefs.setString("password", _passwordController.text);
+      await prefs.setString("password", password);
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => DApp(
-                username: _usernameController.text,
-                password: _passwordController.text)),
+            builder: (context) => Dashboard(
+                username: _usernameController.text, password: password)),
       );
     } else {
       _showMyDialog();
@@ -157,7 +165,7 @@ class LoginMain extends State<Login> {
               if (_usernameController.text != "" &&
                   _passwordController.text != "") {
                 String login = await loginutils.startLogin(
-                    _usernameController.text, _passwordController.text);
+                    _usernameController.text, _passwordController.text, false);
                 var jsonL = json.decode(login);
                 await loginCheck(jsonL, context);
               }
@@ -177,7 +185,7 @@ class LoginMain extends State<Login> {
               if (_usernameController.text != "" &&
                   _passwordController.text != "") {
                 String login = await loginutils.startLogin(
-                    _usernameController.text, _passwordController.text);
+                    _usernameController.text, _passwordController.text, false);
                 var jsonL = json.decode(login);
                 await loginCheck(jsonL, context);
               }
@@ -192,7 +200,7 @@ class LoginMain extends State<Login> {
               if (_usernameController.text != "" &&
                   _passwordController.text != "") {
                 String login = await loginutils.startLogin(
-                    _usernameController.text, _passwordController.text);
+                    _usernameController.text, _passwordController.text, false);
                 var jsonL = json.decode(login);
                 await loginCheck(jsonL, context);
               }
