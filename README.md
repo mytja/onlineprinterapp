@@ -10,10 +10,15 @@
 
 ## Description
 This app communicates between OnlinePrinter API to help control your 3D printer, everywhere and at any time.
+
 This is a offical app by OnlinePrinter developers.
+
 It is fully open-source and all its code is located on GitHub (https://github.com/mytja/onlineprinterapp)
+
 Written in Flutter and Dart, the app can run on all devices with a single codebase, with a huge preformance, if we compare it to other platforms.
+
 The app is quite stable, even though bugs might appear some times.
+
 The lead maintainer and author is @mytja (https://github.com/mytja).
 
 OnlinePrinter is a user-friendly, highly optimized web app, written in Python in Flask framework.
