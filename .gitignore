@@ -42,3 +42,7 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# Secrets
+key.properties
+upload-keystore.jks
