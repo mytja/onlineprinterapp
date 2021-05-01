@@ -8,6 +8,17 @@
 
 <img src="https://user-images.githubusercontent.com/52399966/116789508-89a19980-aaaf-11eb-8acb-1e5f59b061e5.jpg" width="19%"> <img src="https://user-images.githubusercontent.com/52399966/116789517-8e664d80-aaaf-11eb-8dcd-cc90a95a029b.jpg" width="19%"> <img src="https://user-images.githubusercontent.com/52399966/116789519-8f977a80-aaaf-11eb-9ac5-951106baf971.jpg" width="19%"> <img src="https://user-images.githubusercontent.com/52399966/116789511-8c9c8a00-aaaf-11eb-9f86-148037a52475.jpg" width="19%"> <img src="https://user-images.githubusercontent.com/52399966/116789522-91613e00-aaaf-11eb-8fad-f8f931665f2f.jpg" width="19%">
 
+## Description
+This app communicates between OnlinePrinter API to help control your 3D printer, everywhere and at any time.
+This is a offical app by OnlinePrinter developers.
+It is fully open-source and all its code is located on GitHub (https://github.com/mytja/onlineprinterapp)
+Written in Flutter and Dart, the app can run on all devices with a single codebase, with a huge preformance, if we compare it to other platforms.
+The app is quite stable, even though bugs might appear some times.
+The lead maintainer and author is @mytja (https://github.com/mytja).
+
+OnlinePrinter is a user-friendly, highly optimized web app, written in Python in Flask framework.
+It acts as a user-friendly interface between OctoPrint and the user
+
 
 ## Special thanks to this people and organisations
 
