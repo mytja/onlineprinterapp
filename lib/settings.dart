@@ -72,11 +72,15 @@ class SettingsMain extends State<Settings> {
         });
   }
 
+  final myController = TextEditingController();
+
   Widget build(BuildContext context) {
     String url = widget.sp.getString('url') ?? "";
     print(url);
 
     double width = MediaQuery.of(context).size.width;
+
+    myController.text = url;
 
     return ListView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -95,16 +99,18 @@ class SettingsMain extends State<Settings> {
               ),
               Container(
                   width: width / 10 * 8,
-                  child: TextField(
+                  child: TextFormField(
+                    controller: myController,
                     obscureText: false,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'URL',
                         hintText: url),
-                    onSubmitted: (String text) async {
+                    onFieldSubmitted: (String text) async {
                       if (Uri.parse(text).isAbsolute == true) {
                         SharedPreferences sp =
                             await SharedPreferences.getInstance();
+                        print(text.substring(text.length - 1));
                         if (text.substring(text.length - 1) != "/") {
                           text += "/";
                         }

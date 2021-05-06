@@ -79,6 +79,7 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
           ListTile(
             title: Text('Orders'),
             onTap: () async {
+              DashboardWidget.timer?.cancel();
               var r = await getOrders(widget.password, widget.username);
               Navigator.pushAndRemoveUntil(
                   context,

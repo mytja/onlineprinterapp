@@ -10,6 +10,8 @@ import 'constants/constants.dart';
 import 'widgets/drawer.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:provider/provider.dart';
+
 class Dashboard extends StatefulWidget {
   Dashboard({Key? key, required this.username, required this.password})
       : super(key: key);
@@ -18,23 +20,40 @@ class Dashboard extends StatefulWidget {
   final String password;
 
   @override
-  DashboardMain createState() => DashboardMain();
+  DashboardWidget createState() => DashboardWidget();
 }
 
-class DashboardWidget {
-  DashboardWidget(
-      {required this.username, required this.password, required this.context});
-
-  final String username;
-  final String password;
-  final BuildContext context;
-
+class DashboardWidget extends State<Dashboard> {
   Map jsonArchive = {};
 
-  Widget buildWidget() {
+  static Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    const oneSecond = const Duration(seconds: 2);
+    timer = new Timer.periodic(oneSecond, (Timer t) async {
+      timer = t;
+      List<String> snapdata =
+          await DashboardUtils.getPrinter(widget.username, widget.password);
+      String data = snapdata[0];
+      bool stateRefresh = false;
+      try {
+        json.decode(data);
+        stateRefresh = true;
+      } catch (e) {
+        stateRefresh = false;
+      }
+      if (stateRefresh) {
+        setState(() {});
+      }
+    });
+  }
+
+  Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return FutureBuilder(
-        future: DashboardUtils.getPrinter(username, password),
+        future: DashboardUtils.getPrinter(widget.username, widget.password),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           Widget app;
           if (snapshot.hasData) {
@@ -52,7 +71,7 @@ class DashboardWidget {
                 home: Scaffold(
                   appBar: AppBar(title: Text("OnlinePrinterApp")),
                   drawer: PrinterDrawer(
-                      password: this.password, username: this.username),
+                      password: widget.password, username: widget.username),
                   body: ListView(
                       physics: BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
@@ -64,7 +83,7 @@ class DashboardWidget {
                           height: 35,
                           child: Center(
                             child: Text(
-                              'Hello, ' + username,
+                              'Hello, ' + widget.username,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 26),
                             ),
@@ -198,9 +217,9 @@ class DashboardWidget {
                                     SERVER_URL_BED_SET +
                                         temperature.toString() +
                                         "?username=" +
-                                        username +
+                                        widget.username +
                                         "&password=" +
-                                        password));
+                                        widget.password));
                                 print(response.statusCode);
                               } catch (e) {
                                 print(e);
@@ -298,9 +317,9 @@ class DashboardWidget {
                                     SERVER_URL_NOZZLE_SET +
                                         temperature.toString() +
                                         "?username=" +
-                                        username +
+                                        widget.username +
                                         "&password=" +
-                                        password));
+                                        widget.password));
                                 print(response.statusCode);
                               } catch (e) {
                                 print(e);
@@ -337,9 +356,9 @@ class DashboardWidget {
                                     http.Response response = await http.get(
                                         Uri.parse(SERVER_URL_ABORT_PRINT +
                                             "?username=" +
-                                            username +
+                                            widget.username +
                                             "&password=" +
-                                            password));
+                                            widget.password));
                                     print(response.body.toString());
                                     print(response.statusCode);
                                   }),
@@ -408,27 +427,5 @@ class DashboardUtils {
         "&password=" +
         password));
     return [printer.body.toString(), canAbort.body.toString()];
-  }
-}
-
-/// This is the private State class that goes with MyStatefulWidget.
-class DashboardMain extends State<Dashboard> {
-  static Timer? timer;
-
-  @override
-  void initState() {
-    super.initState();
-    const oneSecond = const Duration(seconds: 2);
-    timer = new Timer.periodic(oneSecond, (Timer t) {
-      setState(() {});
-    });
-  }
-
-  Widget build(BuildContext context) {
-    return DashboardWidget(
-            username: widget.username,
-            password: widget.password,
-            context: context)
-        .buildWidget();
   }
 }

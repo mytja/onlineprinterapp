@@ -46,6 +46,8 @@ class AboutScreen extends State<AboutState> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
+    print("About");
+
     return ListView(
       physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
@@ -73,35 +75,44 @@ class AboutScreen extends State<AboutState> {
             ],
           ),
         ),
-        Card(
-          child: Column(
-            children: [
-              Center(child: Text("Project", style: TextStyle(fontSize: 25))),
-              Container(height: 10),
-              Row(children: [
-                Container(
-                    width: width / 5,
-                    child: Image.asset("assets/logo-small.png")),
-                Container(width: 5),
-                Column(
-                  children: [
-                    Text("OnlinePrinterApp", style: TextStyle(fontSize: 25)),
-                    Text(
-                        widget.projectJSON["stargazers_count"].toString() +
-                            " star(s)",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
-                    Text(
-                        widget.projectJSON["forks_count"].toString() +
-                            " fork(s)",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
-                    Text(VERSION,
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
-                  ],
-                )
-              ]),
-            ],
-          ),
-        ),
+        GestureDetector(
+            onTap: () async {
+              if (await canLaunch(
+                  "https://github.com/mytja/onlineprinterapp")) {
+                await launch("https://github.com/mytja/onlineprinterapp");
+              }
+            },
+            child: Card(
+              child: Column(
+                children: [
+                  Center(
+                      child: Text("Project", style: TextStyle(fontSize: 25))),
+                  Container(height: 10),
+                  Row(children: [
+                    Container(
+                        width: width / 5,
+                        child: Image.asset("assets/logo-small.png")),
+                    Container(width: 5),
+                    Column(
+                      children: [
+                        Text("OnlinePrinterApp",
+                            style: TextStyle(fontSize: 25)),
+                        Text(
+                            widget.projectJSON["stargazers_count"].toString() +
+                                " star(s)",
+                            style: TextStyle(fontSize: 18, color: Colors.grey)),
+                        Text(
+                            widget.projectJSON["forks_count"].toString() +
+                                " fork(s)",
+                            style: TextStyle(fontSize: 18, color: Colors.grey)),
+                        Text(VERSION,
+                            style: TextStyle(fontSize: 18, color: Colors.grey)),
+                      ],
+                    )
+                  ]),
+                ],
+              ),
+            )),
         Center(child: Text("The developers", style: TextStyle(fontSize: 25))),
         GestureDetector(
             onTap: () async {
