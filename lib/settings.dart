@@ -24,7 +24,10 @@ class Setting extends StatelessWidget {
             title: Text("OnlinePrinterApp"),
             leading: BackButton(
               onPressed: () {
-                runApp(WaitingApp());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WaitingApp()),
+                );
               },
             ),
           ),
