@@ -10,8 +10,6 @@ import 'constants/constants.dart';
 import 'widgets/drawer.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:provider/provider.dart';
-
 class Dashboard extends StatefulWidget {
   Dashboard({Key? key, required this.username, required this.password})
       : super(key: key);
@@ -32,8 +30,7 @@ class DashboardWidget extends State<Dashboard> {
   void initState() {
     super.initState();
     const oneSecond = const Duration(seconds: 2);
-    timer = new Timer.periodic(oneSecond, (Timer t) async {
-      timer = t;
+    timer = Timer.periodic(oneSecond, (Timer t) async {
       List<String> snapdata =
           await DashboardUtils.getPrinter(widget.username, widget.password);
       String data = snapdata[0];

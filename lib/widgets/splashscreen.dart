@@ -50,8 +50,10 @@ class DashboardSplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          body:
-              ListView(children: [Splash(), Container(height: 20), Waiting()])),
+          body: ListView(
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              children: [Splash(), Container(height: 20), Waiting()])),
       theme: Themes.LightTheme(),
       darkTheme: Themes.DarkTheme(),
       themeMode: Themes.Theme(),

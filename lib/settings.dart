@@ -3,6 +3,8 @@ import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants/constants.dart';
 
+import 'package:onlineprinterapp/widgets/splashscreen.dart';
+
 class Setting extends StatelessWidget {
   Setting({this.username, this.password, required this.sp});
 
@@ -22,7 +24,7 @@ class Setting extends StatelessWidget {
             title: Text("OnlinePrinterApp"),
             leading: BackButton(
               onPressed: () {
-                Navigator.pop(context);
+                runApp(WaitingApp());
               },
             ),
           ),
