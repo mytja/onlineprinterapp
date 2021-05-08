@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:onlineprinterapp/constants/constants.dart';
 import 'package:onlineprinterapp/main.dart';
+import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/settings.dart';
 import 'package:onlineprinterapp/widgets/backbutton.dart';
 import 'package:onlineprinterapp/widgets/drawer.dart';
@@ -26,7 +27,12 @@ class Background {
     if (SERVER_URL != "") {
       String user = prefs.getString('username') ?? "";
       String pass = prefs.getString('password') ?? "";
-      String response = await loginutils.startLogin(user, pass, true);
+      String? response;
+      try {
+        response = await loginutils.startLogin(user, pass, true);
+      } catch (e) {
+        return ExceptionScreen.app(e, null);
+      }
       //print(response);
       //print(pass);
       //print(user);

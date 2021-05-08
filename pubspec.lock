@@ -71,6 +71,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.0"
+  fl_flash:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "168f665a0176c29186cf62fa6d16ad1d1e51b323"
+      url: "https://github.com/mytja/fl_flash.git"
+    source: git
+    version: "0.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -121,13 +130,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -184,13 +186,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.1"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
   shared_preferences:
     dependency: "direct main"
     description:

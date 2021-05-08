@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:fl_flash/fl_flash.dart';
 import 'package:flutter/material.dart';
 
 import 'package:onlineprinterapp/dashboard.dart';
+import 'package:onlineprinterapp/register.dart';
+import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/widgets/splashscreen.dart';
 import 'package:onlineprinterapp/widgets/drawer.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
@@ -146,6 +149,9 @@ class LoginMain extends State<Login> {
     return ListView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: <Widget>[
+          (() {
+            return MaterialFlash();
+          }()),
           Container(height: 50),
           Text(
             "OnlinePrinter Login",
@@ -162,12 +168,17 @@ class LoginMain extends State<Login> {
               labelText: 'Username or E-Mail',
             ),
             onSubmitted: (String text) async {
-              if (_usernameController.text != "" &&
-                  _passwordController.text != "") {
+              try {
                 String login = await loginutils.startLogin(
                     _usernameController.text, _passwordController.text, false);
                 var jsonL = json.decode(login);
                 await loginCheck(jsonL, context);
+              } catch (e) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ExceptionApp(exception: e)),
+                );
               }
             },
           ),
@@ -184,10 +195,20 @@ class LoginMain extends State<Login> {
             onSubmitted: (String text) async {
               if (_usernameController.text != "" &&
                   _passwordController.text != "") {
-                String login = await loginutils.startLogin(
-                    _usernameController.text, _passwordController.text, false);
-                var jsonL = json.decode(login);
-                await loginCheck(jsonL, context);
+                try {
+                  String login = await loginutils.startLogin(
+                      _usernameController.text,
+                      _passwordController.text,
+                      false);
+                  var jsonL = json.decode(login);
+                  await loginCheck(jsonL, context);
+                } catch (e) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExceptionApp(exception: e)),
+                  );
+                }
               }
             },
           ),
@@ -199,11 +220,34 @@ class LoginMain extends State<Login> {
             onPressed: () async {
               if (_usernameController.text != "" &&
                   _passwordController.text != "") {
-                String login = await loginutils.startLogin(
-                    _usernameController.text, _passwordController.text, false);
-                var jsonL = json.decode(login);
-                await loginCheck(jsonL, context);
+                try {
+                  String login = await loginutils.startLogin(
+                      _usernameController.text,
+                      _passwordController.text,
+                      false);
+                  var jsonL = json.decode(login);
+                  await loginCheck(jsonL, context);
+                } catch (e) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExceptionApp(exception: e)),
+                  );
+                }
               }
+            },
+          ),
+          Container(height: 20),
+          GestureDetector(
+            child: Text(
+              "Don't have an account yet? Register here",
+              style: TextStyle(color: Colors.blue),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Register()),
+              );
             },
           )
         ]);

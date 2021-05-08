@@ -10,6 +10,8 @@ import 'constants/constants.dart';
 import 'widgets/drawer.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:fl_flash/fl_flash.dart';
+
 class Dashboard extends StatefulWidget {
   Dashboard({Key? key, required this.username, required this.password})
       : super(key: key);
@@ -64,6 +66,25 @@ class DashboardWidget extends State<Dashboard> {
                 print("Using JSON archive");
                 jsonL = jsonArchive;
               }
+              if (jsonL["status"] == "Printing" ||
+                  jsonL["status"] == "Operational" ||
+                  jsonL["status"] == "Printing from SD") {
+                Flash status = Flash(
+                    mainText: Text("Status: " + jsonL["status"],
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold)),
+                    backgroundColor: Colors.green.shade300,
+                    icon: Icon(Icons.check));
+                FlashManager.add(status);
+              } else {
+                Flash status = Flash(
+                    mainText: Text("Status: " + jsonL["status"],
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold)),
+                    backgroundColor: Colors.red.shade300,
+                    icon: Icon(Icons.cancel));
+                FlashManager.add(status);
+              }
               app = MaterialApp(
                 home: Scaffold(
                   appBar: AppBar(title: Text("OnlinePrinterApp")),
@@ -103,6 +124,9 @@ class DashboardWidget extends State<Dashboard> {
                             Container(
                               width: 5,
                             ),
+                            (() {
+                              return MaterialFlash();
+                            }()),
                             Container(
                               width: width / 2 - 5 - 4,
                               child: Text(
