@@ -1,24 +1,30 @@
+import 'dart:convert';
+
 import 'package:fl_flash/fl_flash.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlineprinterapp/constants/constants.dart';
+import 'package:onlineprinterapp/main.dart';
 import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 
 class RegisterUtils {
   Future<int> register(String password, String username, String email,
       String firstName, String lastName) async {
-    var response = await http.post(Uri.parse(SERVER_URL_REGISTER +
+    String url = SERVER_URL_REGISTER +
         "?username=" +
         username +
         "&password=" +
-        password +
+        base64Encode(utf8.encode(password)) +
         "&email=" +
         email +
         "&fname=" +
         firstName +
         "&lname=" +
-        lastName));
+        lastName;
+    print(url);
+    var response = await http.post(Uri.parse(url));
+    print(response.statusCode);
     return response.statusCode;
   }
 }
@@ -130,7 +136,7 @@ class Register extends StatelessWidget {
                   ),
                   TextField(
                     obscureText: false,
-                    controller: _emailController,
+                    controller: _usernameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Username',
@@ -190,6 +196,8 @@ class Register extends StatelessWidget {
                                 backgroundColor: Colors.green.shade300,
                                 icon: Icon(Icons.check));
                             FlashManager.add(account);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => App()));
                           } else {
                             _showMyDialog(login, context);
                           }
@@ -203,7 +211,10 @@ class Register extends StatelessWidget {
                         }
                       }
                     },
-                  )
+                  ),
+                  Container(height: 10),
+                  Text(
+                      "By clicking Register button, you agree to Terms of service")
                 ]),
             appBar: AppBar(
               title: Text("OnlinePrinterApp"),

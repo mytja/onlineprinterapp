@@ -73,7 +73,7 @@ class DashboardWidget extends State<Dashboard> {
                     mainText: Text("Status: " + jsonL["status"],
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold)),
-                    backgroundColor: Colors.green.shade300,
+                    backgroundColor: Colors.green.shade400,
                     icon: Icon(Icons.check));
                 FlashManager.add(status);
               } else {
@@ -118,36 +118,9 @@ class DashboardWidget extends State<Dashboard> {
                         Container(
                           height: 20,
                         ),
-                        Card(
-                            child: Row(
-                          children: [
-                            Container(
-                              width: 5,
-                            ),
-                            (() {
-                              return MaterialFlash();
-                            }()),
-                            Container(
-                              width: width / 2 - 5 - 4,
-                              child: Text(
-                                'Status',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
-                            Container(
-                                width: width / 2 - 4,
-                                child: (() {
-                                  if (jsonL != {} ||
-                                      jsonL != null ||
-                                      jsonL["status"] != null) {
-                                    return Text(
-                                      jsonL["status"].toString(),
-                                    );
-                                  }
-                                }())),
-                          ],
-                        )),
+                        (() {
+                          return MaterialFlash();
+                        }()),
                         Container(
                           height: 20,
                         ),
