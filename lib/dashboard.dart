@@ -33,12 +33,11 @@ class DashboardWidget extends State<Dashboard> {
     super.initState();
     const oneSecond = const Duration(seconds: 2);
     timer = Timer.periodic(oneSecond, (Timer t) async {
-      List<String> snapdata =
+      String snapdata =
           await DashboardUtils.getPrinter(widget.username, widget.password);
-      String data = snapdata[0];
       bool stateRefresh = false;
       try {
-        json.decode(data);
+        json.decode(snapdata);
         stateRefresh = true;
       } catch (e) {
         stateRefresh = false;
@@ -119,7 +118,7 @@ class DashboardWidget extends State<Dashboard> {
                           height: 20,
                         ),
                         (() {
-                          return MaterialFlash();
+                          return MaterialFlash(limit: 1);
                         }()),
                         Container(
                           height: 20,
@@ -325,7 +324,7 @@ class DashboardWidget extends State<Dashboard> {
                           bool canAbort = false;
                           try {
                             canAbort =
-                                json.decode(snapshot.data[1])["canAbort"];
+                                json.decode(snapshot.data)["abort"]["canAbort"];
                           } catch (e) {
                             canAbort = false;
                           }
@@ -412,14 +411,12 @@ class DashboardWidget extends State<Dashboard> {
 }
 
 class DashboardUtils {
-  static Future<List<String>> getPrinter(
-      String username, String password) async {
-    var printer = await http.get(Uri.parse(SERVER_URL_PRINTER));
-    var canAbort = await http.get(Uri.parse(SERVER_URL_ABORT_PRINT_CHECK +
+  static Future<String> getPrinter(String username, String password) async {
+    var printer = await http.get(Uri.parse(SERVER_URL_PRINTER +
         "?username=" +
         username +
         "&password=" +
         password));
-    return [printer.body.toString(), canAbort.body.toString()];
+    return printer.body.toString();
   }
 }
