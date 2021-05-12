@@ -19,23 +19,18 @@ jobs:
     
     #- run: flutter create .
 
-    - name: Get new dependencies
     - run: flutter pub upgrade
 
-    - name: Pull dependencies
     - run: flutter pub get
 
-    - name: Enable Windows desktop building
     - run: flutter config --enable-windows-desktop
 
     - run: flutter doctor --verbose
 
     - run: flutter devices
     
-    - name: Build Windows app
     - run: flutter build windows --verbose
     
-    - name: Upload artifact
     - uses: actions/upload-artifact@v1
       with:
         name: windows_onlineprinter
