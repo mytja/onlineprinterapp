@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/widgets/splashscreen.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
+import 'package:onlineprinterapp/widgets/unlockbutton.dart';
 import 'package:onlineprinterapp/widgets/waiting.dart';
 import 'constants/constants.dart';
 import 'widgets/drawer.dart';
@@ -50,12 +51,12 @@ class DashboardWidget extends State<Dashboard> {
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return FutureBuilder(
+    return FutureBuilder<String>(
         future: DashboardUtils.getPrinter(widget.username, widget.password),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           Widget app;
           if (snapshot.hasData) {
-            String? snapdata = snapshot.data[0];
+            String? snapdata = snapshot.data;
             if (snapdata != null) {
               Map jsonL = {};
               try {
@@ -65,6 +66,7 @@ class DashboardWidget extends State<Dashboard> {
                 print("Using JSON archive");
                 jsonL = jsonArchive;
               }
+              //print(jsonL);
               if (jsonL["status"] == "Printing" ||
                   jsonL["status"] == "Operational" ||
                   jsonL["status"] == "Printing from SD") {
@@ -86,6 +88,8 @@ class DashboardWidget extends State<Dashboard> {
               }
               app = MaterialApp(
                 home: Scaffold(
+                  floatingActionButton: UnlockButton(
+                      password: widget.password, username: widget.username),
                   appBar: AppBar(title: Text("OnlinePrinterApp")),
                   drawer: PrinterDrawer(
                       password: widget.password, username: widget.username),
@@ -125,6 +129,7 @@ class DashboardWidget extends State<Dashboard> {
                         ),
                         Card(
                             child: Column(children: [
+                          Container(height: 10),
                           Container(
                               height: 20,
                               child: Center(
@@ -219,12 +224,14 @@ class DashboardWidget extends State<Dashboard> {
                               }
                             },
                           ),
+                          Container(height: 10),
                         ])),
-                        Container(
-                          height: 20,
-                        ),
+                        //Container(
+                        //  height: 20,
+                        //),
                         Card(
                             child: Column(children: [
+                          Container(height: 10),
                           Container(
                               height: 20,
                               child: Center(
@@ -318,19 +325,21 @@ class DashboardWidget extends State<Dashboard> {
                                 print(e);
                               }
                             },
-                          )
+                          ),
+                          Container(height: 10),
                         ])),
                         (() {
                           bool canAbort = false;
                           try {
                             canAbort =
-                                json.decode(snapshot.data)["abort"]["canAbort"];
+                                json.decode(snapdata)["abort"]["canAbort"];
                           } catch (e) {
                             canAbort = false;
                           }
                           if (canAbort == true) {
                             return Card(
                                 child: Column(children: [
+                              Container(height: 10),
                               Container(
                                   height: 20,
                                   child: Center(

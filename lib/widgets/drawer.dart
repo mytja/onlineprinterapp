@@ -95,6 +95,7 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
           ListTile(
             title: Text('Camera Stream'),
             onTap: () {
+              DashboardWidget.timer!.cancel();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -109,6 +110,7 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
             title: Text('Settings'),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
+              DashboardWidget.timer!.cancel();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -124,6 +126,7 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
             onTap: () async {
               http.Response response = await http.get(Uri.parse(
                   "https://api.github.com/repos/mytja/onlineprinterapp"));
+              DashboardWidget.timer!.cancel();
               String text = response.body.toString();
               Map<String, dynamic> jsonL = json.decode(text);
               Navigator.pushAndRemoveUntil(
@@ -142,6 +145,7 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
             title: Text('Logout'),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
+              DashboardWidget.timer!.cancel();
               prefs.remove("username");
               prefs.remove("password");
               Navigator.pushAndRemoveUntil(

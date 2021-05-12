@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build APK and Create release
+    name: Build .exe for Windows
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v1
@@ -19,20 +19,25 @@ jobs:
     
     #- run: flutter create .
 
+    - name: Get new dependencies
+    - run: flutter pub upgrade
+
+    - name: Pull dependencies
     - run: flutter pub get
 
+    - name: Enable Windows desktop building
     - run: flutter config --enable-windows-desktop
 
     - run: flutter doctor --verbose
 
     - run: flutter devices
     
+    - name: Build Windows app
     - run: flutter build windows --verbose
-
-    - run: dir build\windows\runner\Release\
-      
+    
+    - name: Upload artifact
     - uses: actions/upload-artifact@v1
       with:
-        name: Upload Windows app
+        name: windows_onlineprinter
         path: build\windows\runner\Release\
 
