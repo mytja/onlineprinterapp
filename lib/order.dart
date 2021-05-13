@@ -1,12 +1,11 @@
 import 'dart:convert';
 
+import 'package:fl_flash/fl_flash.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'constants/constants.dart';
-
-import 'printerror.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class Order extends StatefulWidget {
@@ -44,6 +43,30 @@ class OrderMain extends State<Order> {
     }
   }
 
+  void startPrintFlash(int responseCode) {
+    if (300 > responseCode && responseCode > 199) {
+      Flash startprint = Flash(
+          id: "startprint",
+          mainText: Text(
+            "Successfully started to print",
+          ),
+          icon: Icon(Icons.check),
+          backgroundColor: Colors.green.shade400);
+      FlashManager.add(startprint);
+      setState(() {});
+    } else {
+      Flash startprint = Flash(
+          id: "startprint",
+          mainText: Text(
+            "Failed to start a print. \nSomething is already printing",
+          ),
+          icon: Icon(Icons.cancel),
+          backgroundColor: Colors.red.shade400);
+      FlashManager.add(startprint);
+      setState(() {});
+    }
+  }
+
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
@@ -74,6 +97,13 @@ class OrderMain extends State<Order> {
                   print(jsonL["responseCode"]);
                   if (jsonL["responseCode"] == 200) {
                     children = <Widget>[
+                      Container(height: 10),
+                      (() {
+                        return MaterialFlash(
+                          ignore: ["printstatus", "registerfailed"],
+                          deleteAll: true,
+                        );
+                      }()),
                       Container(
                         height: 20,
                       ),
@@ -139,14 +169,7 @@ class OrderMain extends State<Order> {
                                         widget.password));
                                 print(r.body);
                                 var jsonL2 = json.decode(r.body);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PrintError(
-                                            responseCode:
-                                                jsonL2["responseCode"],
-                                          )),
-                                );
+                                startPrintFlash(jsonL2["responseCode"]);
                               },
                             ))
                       ]),

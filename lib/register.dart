@@ -29,7 +29,12 @@ class RegisterUtils {
   }
 }
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
+  @override
+  RegisterPage createState() => new RegisterPage();
+}
+
+class RegisterPage extends State<Register> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
@@ -38,188 +43,160 @@ class Register extends StatelessWidget {
 
   final registerutils = RegisterUtils();
 
-  Future<void> _showMyDialog(int responseCode, BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        if (responseCode == 409) {
-          return AlertDialog(
-            title: Text('Registration failed'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('409 - Conflict'),
-                  Text('Account already exists.')
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        } else if (responseCode == 400) {
-          return AlertDialog(
-            title: Text('Registration failed'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('400 - Bad request'),
-                  Text(
-                      "App hasn't provided enough data and account couldn't be created")
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        } else {
-          return AlertDialog(
-            title: Text('Wrong login info'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('403 - Forbidden'),
-                  Text('You entered wrong login info.')
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        }
-      },
-    );
+  void invalidRegister(int responseCode) {
+    Flash _409 = Flash(
+        id: "registerfailed",
+        mainText: Text(
+          "Registration failed \nAccount already exists",
+        ),
+        backgroundColor: Colors.red.shade400);
+    Flash _400 = Flash(
+        id: "registerfailed",
+        mainText: Text(
+          "Registration failed \nBad request \nApp hasn't provided enough credentials for login",
+        ),
+        backgroundColor: Colors.red.shade400);
+    if (responseCode == 409) {
+      FlashManager.add(_409);
+    } else if (responseCode == 400) {
+      FlashManager.add(_400);
+    } else {
+      Flash none = Flash(
+          id: "registerfailed",
+          mainText: Text(
+            "Registration failed \nUnknown error: " + responseCode.toString(),
+          ),
+          backgroundColor: Colors.red.shade400);
+      FlashManager.add(none);
+    }
   }
 
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'OnlinePrinterApp',
         home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: ListView(
-                physics: BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                children: <Widget>[
-                  Container(height: 50),
-                  Text(
-                    "OnlinePrinter Registration",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          resizeToAvoidBottomInset: false,
+          body: ListView(
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              children: <Widget>[
+                Container(height: 10),
+                (() {
+                  return MaterialFlash(
+                    ignore: ["printstatus", "loginfailed"],
+                    deleteAll: false,
+                  );
+                }()),
+                Container(height: 10),
+                Text(
+                  "OnlinePrinter Registration",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Container(
+                  height: 20,
+                ),
+                TextField(
+                  obscureText: false,
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'E-Mail',
                   ),
-                  Container(
-                    height: 20,
+                ),
+                TextField(
+                  obscureText: false,
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Username',
                   ),
-                  TextField(
-                    obscureText: false,
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'E-Mail',
-                    ),
+                ),
+                TextField(
+                  obscureText: false,
+                  controller: _fnameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'First name',
                   ),
-                  TextField(
-                    obscureText: false,
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Username',
-                    ),
+                ),
+                TextField(
+                  obscureText: false,
+                  controller: _lnameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Last name',
                   ),
-                  TextField(
-                    obscureText: false,
-                    controller: _fnameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'First name',
-                    ),
+                ),
+                Container(
+                  height: 5,
+                ),
+                TextField(
+                  obscureText: true,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
                   ),
-                  TextField(
-                    obscureText: false,
-                    controller: _lnameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Last name',
-                    ),
-                  ),
-                  Container(
-                    height: 5,
-                  ),
-                  TextField(
-                    obscureText: true,
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    child: Text("Register"),
-                    onPressed: () async {
-                      if (_usernameController.text != "" &&
-                          _passwordController.text != "" &&
-                          _emailController.text != "" &&
-                          _lnameController.text != "" &&
-                          _fnameController.text != "") {
-                        try {
-                          int login = await registerutils.register(
-                              _passwordController.text,
-                              _usernameController.text,
-                              _emailController.text,
-                              _fnameController.text,
-                              _lnameController.text);
-                          if (login == 201) {
-                            Flash account = Flash(
-                                mainText: Text("Account created successfully",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold)),
-                                backgroundColor: Colors.green.shade300,
-                                icon: Icon(Icons.check));
-                            FlashManager.add(account);
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => App()));
-                          } else {
-                            _showMyDialog(login, context);
-                          }
-                        } catch (e) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ExceptionApp(exception: e)),
-                          );
+                ),
+                Container(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text("Register"),
+                  onPressed: () async {
+                    if (_usernameController.text != "" &&
+                        _passwordController.text != "" &&
+                        _emailController.text != "" &&
+                        _lnameController.text != "" &&
+                        _fnameController.text != "") {
+                      try {
+                        int login = await registerutils.register(
+                            _passwordController.text,
+                            _usernameController.text,
+                            _emailController.text,
+                            _fnameController.text,
+                            _lnameController.text);
+                        if (login == 201) {
+                          Flash account = Flash(
+                              mainText: Text("Account created successfully",
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold)),
+                              backgroundColor: Colors.green.shade300,
+                              icon: Icon(Icons.check));
+                          FlashManager.add(account);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => App()));
+                        } else {
+                          invalidRegister(login);
+                          setState(() {});
                         }
+                      } catch (e) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ExceptionApp(exception: e)),
+                        );
                       }
-                    },
-                  ),
-                  Container(height: 10),
-                  Text(
-                      "By clicking Register button, you agree to Terms of service")
-                ]),
-            appBar: AppBar(
-              title: Text("OnlinePrinterApp"),
+                    }
+                  },
+                ),
+                Container(height: 10),
+                Text(
+                    "By clicking Register button, you agree to Terms of service")
+              ]),
+          appBar: AppBar(
+            title: Text("OnlinePrinterApp"),
+            leading: BackButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => App()),
+                );
+              },
             ),
-            drawer: BackButton()),
+          ),
+        ),
         theme: Themes.LightTheme(),
         darkTheme: Themes.DarkTheme(),
         themeMode: Themes.Theme());

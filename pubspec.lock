@@ -76,7 +76,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: aa01c7c8f8cfe621960b709d86461f0df7299482
+      resolved-ref: "38d82c7611c55dcefaac7acf85886ac62454ae1d"
       url: "https://github.com/mytja/fl_flash.git"
     source: git
     version: "0.0.1"

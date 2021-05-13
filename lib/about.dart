@@ -51,13 +51,14 @@ class AboutScreen extends State<AboutState> {
     return ListView(
       physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
+        Container(height: 10),
         Center(child: Text("OnlinePrinterApp", style: TextStyle(fontSize: 25))),
+        Container(height: 10),
         Card(
           child: Column(
             children: [
               Center(
-                  child: Text("Project description",
-                      style: TextStyle(fontSize: 25))),
+                  child: Text("Description", style: TextStyle(fontSize: 25))),
               Container(height: 10),
               Row(children: [
                 Container(
@@ -75,6 +76,7 @@ class AboutScreen extends State<AboutState> {
             ],
           ),
         ),
+        Container(height: 5),
         GestureDetector(
             onTap: () async {
               if (await canLaunch(
@@ -86,7 +88,8 @@ class AboutScreen extends State<AboutState> {
               child: Column(
                 children: [
                   Center(
-                      child: Text("Project", style: TextStyle(fontSize: 25))),
+                      child: Text("OnlinePrinterApp",
+                          style: TextStyle(fontSize: 25))),
                   Container(height: 10),
                   Row(children: [
                     Container(
@@ -95,8 +98,6 @@ class AboutScreen extends State<AboutState> {
                     Container(width: 5),
                     Column(
                       children: [
-                        Text("OnlinePrinterApp",
-                            style: TextStyle(fontSize: 25)),
                         Text(
                             widget.projectJSON["stargazers_count"].toString() +
                                 " star(s)",
@@ -113,7 +114,9 @@ class AboutScreen extends State<AboutState> {
                 ],
               ),
             )),
+        Container(height: 30),
         Center(child: Text("The developers", style: TextStyle(fontSize: 25))),
+        Container(height: 10),
         GestureDetector(
             onTap: () async {
               if (await canLaunch("https://github.com/mytja")) {
@@ -143,7 +146,9 @@ class AboutScreen extends State<AboutState> {
                 ],
               ),
             )),
+        Container(height: 30),
         Center(child: Text("OnlinePrinter", style: TextStyle(fontSize: 25))),
+        Container(height: 10),
         Card(
           child: Column(
             children: [

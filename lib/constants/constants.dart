@@ -14,7 +14,7 @@ String SERVER_URL_ABORT_PRINT = SERVER_URL + "api/order/abort";
 String SERVER_URL_REGISTER = SERVER_URL + "api/auth/register";
 String SERVER_URL_UNLOCK_PRINTER = SERVER_URL + "api/printer/unlock";
 
-const String VERSION = "Stable 1.1.1";
+const String VERSION = "Beta 1.1.2";
 
 void updateVars(String baseURL) {
   print(baseURL);

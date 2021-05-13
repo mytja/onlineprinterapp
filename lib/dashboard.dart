@@ -49,6 +49,30 @@ class DashboardWidget extends State<Dashboard> {
     });
   }
 
+  void abortPrintFlash(int responseCode) {
+    if (300 > responseCode && responseCode > 199) {
+      Flash startprint = Flash(
+          id: "startprint",
+          mainText: Text(
+            "Successfully started to print",
+          ),
+          icon: Icon(Icons.check),
+          backgroundColor: Colors.green.shade400);
+      FlashManager.add(startprint);
+      setState(() {});
+    } else {
+      Flash startprint = Flash(
+          id: "startprint",
+          mainText: Text(
+            "Failed to start a print. \nSomething is already printing",
+          ),
+          icon: Icon(Icons.cancel),
+          backgroundColor: Colors.red.shade400);
+      FlashManager.add(startprint);
+      setState(() {});
+    }
+  }
+
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return FutureBuilder<String>(
@@ -71,6 +95,7 @@ class DashboardWidget extends State<Dashboard> {
                   jsonL["status"] == "Operational" ||
                   jsonL["status"] == "Printing from SD") {
                 Flash status = Flash(
+                    id: "printstatus",
                     mainText: Text("Status: " + jsonL["status"],
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold)),
@@ -79,6 +104,7 @@ class DashboardWidget extends State<Dashboard> {
                 FlashManager.add(status);
               } else {
                 Flash status = Flash(
+                    id: "printstatus",
                     mainText: Text("Status: " + jsonL["status"],
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold)),

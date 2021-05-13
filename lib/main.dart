@@ -95,34 +95,6 @@ class LoginMain extends State<Login> {
 
   final loginutils = LoginUtils();
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Wrong login info'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('403 - Forbidden'),
-                Text('You entered wrong login info.')
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> loginCheck(
       Map<String, dynamic> jsonL, BuildContext context) async {
     if (jsonL["responseCode"] == 200) {
@@ -141,7 +113,12 @@ class LoginMain extends State<Login> {
                 username: _usernameController.text, password: password)),
       );
     } else {
-      _showMyDialog();
+      Flash fail = Flash(
+          mainText: Text("Failed to login"),
+          id: "loginfailed",
+          backgroundColor: Colors.red.shade400);
+      FlashManager.add(fail);
+      setState(() {});
     }
   }
 
@@ -150,7 +127,10 @@ class LoginMain extends State<Login> {
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: <Widget>[
           (() {
-            return MaterialFlash();
+            return MaterialFlash(
+              ignore: ["printstatus", "registerfailed"],
+              deleteAll: false,
+            );
           }()),
           Container(height: 50),
           Text(
