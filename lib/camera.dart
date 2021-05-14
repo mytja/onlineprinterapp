@@ -1,7 +1,6 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
+import 'package:onlineprinterapp/widgets/xyz_controller.dart';
 
 import 'constants/constants.dart';
 import 'widgets/drawer.dart';
@@ -44,41 +43,31 @@ class CameraStream extends StatefulWidget {
 class CameraStreamMain extends State<CameraStream> {
   Widget build(BuildContext context) {
     print(SERVER_URL_WEBCAM);
-
-    if (Platform.isAndroid ||
-        Platform.isIOS ||
-        Platform.isLinux ||
-        Platform.isWindows ||
-        Platform.isMacOS) {
-      return Center(
-          child: ListView(
-              physics: BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-              children: [
-            Container(
-              height: 30,
-            ),
+    return Center(
+        child: ListView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+          Container(
+            height: 30,
+          ),
+          Card(
+              child: Column(children: [
+            Container(height: 10),
             Center(
                 child: Text(
               "Webcam Stream: ",
               style: TextStyle(fontSize: 26),
             )),
+            Container(height: 5),
             MjpegView(
               url: SERVER_URL_WEBCAM,
-            )
-          ]));
-    } else {
-      return Center(
-          child: ListView(children: [
-        Container(
-          height: 30,
-        ),
-        Center(
-            child: Text(
-          "Sorry, but webcam stream is not supported on this platform yet 😢",
-          style: TextStyle(fontSize: 26),
-        )),
-      ]));
-    }
+            ),
+            Container(height: 10),
+          ])),
+          Container(height: 20),
+          PositionController(
+              username: widget.username, password: widget.password),
+        ]));
   }
 }

@@ -153,6 +153,137 @@ class DashboardWidget extends State<Dashboard> {
                         Container(
                           height: 20,
                         ),
+                        /*
+                        Card(
+                            child: Column(children: [
+                          Container(height: 10),
+                          Container(
+                              height: 20,
+                              child: Center(
+                                  child: Text(
+                                'Server',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ))),
+                          Row(
+                            children: [
+                              Container(
+                                width: 5,
+                              ),
+                              Container(
+                                width: width / 2 - 5 - 4,
+                                child: Text(
+                                  'Last cached',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                              Container(
+                                width: width / 2 - 4,
+                                child: Container(
+                                    width: width / 2 - 4,
+                                    child: (() {
+                                      if (jsonL != {} ||
+                                          jsonL != null ||
+                                          jsonL["server"]["caching"]["last"] !=
+                                              null) {
+                                        return Text(
+                                          jsonL["server"]["caching"]["last"]
+                                                  .toString() +
+                                              " seconds ago",
+                                        );
+                                      }
+                                    }())),
+                              ),
+                            ],
+                          ),
+                        ])),
+                        */
+                        (() {
+                          if (jsonL["job"]["job"] != null) {
+                            return Card(
+                                child: Column(children: [
+                              Container(height: 10),
+                              Container(
+                                  height: 20,
+                                  child: Center(
+                                      child: Text(
+                                    'Job',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ))),
+                              Container(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 5,
+                                  ),
+                                  Container(
+                                    width: width / 2 - 5 - 4,
+                                    child: Text(
+                                      'Finished (%)',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: width / 2 - 4,
+                                    child: Container(
+                                        width: width / 2 - 4,
+                                        child: (() {
+                                          if (jsonL != {} ||
+                                              jsonL != null ||
+                                              jsonL["job"] != null) {
+                                            return Text(
+                                              jsonL["job"]["progress"]
+                                                          ["completion"]
+                                                      .toString() +
+                                                  "%",
+                                            );
+                                          }
+                                        }())),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 5,
+                                  ),
+                                  Container(
+                                    width: width / 2 - 5 - 4,
+                                    child: Text(
+                                      'Name',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                  Container(
+                                      width: width / 2 - 4,
+                                      child: (() {
+                                        if (jsonL != {} ||
+                                            jsonL != null ||
+                                            jsonL["job"] != null) {
+                                          return Text(
+                                            jsonL["job"]["job"]["file"]["name"]
+                                                .toString(),
+                                          );
+                                        }
+                                      }())),
+                                ],
+                              ),
+                              Container(height: 10),
+                            ]));
+                          } else {
+                            return Container(height: 0);
+                          }
+                        }()),
                         Card(
                             child: Column(children: [
                           Container(height: 10),
@@ -363,34 +494,7 @@ class DashboardWidget extends State<Dashboard> {
                             canAbort = false;
                           }
                           if (canAbort == true) {
-                            return Card(
-                                child: Column(children: [
-                              Container(height: 10),
-                              Container(
-                                  height: 20,
-                                  child: Center(
-                                      child: Text(
-                                    'Print',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ))),
-                              Container(
-                                height: 10,
-                              ),
-                              ElevatedButton(
-                                  child: Text("Abort print"),
-                                  onPressed: () async {
-                                    http.Response response = await http.get(
-                                        Uri.parse(SERVER_URL_ABORT_PRINT +
-                                            "?username=" +
-                                            widget.username +
-                                            "&password=" +
-                                            widget.password));
-                                    print(response.body.toString());
-                                    print(response.statusCode);
-                                  }),
-                            ]));
+                            return Card(child: Column(children: []));
                           } else {
                             return Container(height: 1);
                           }
