@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/screens/exception.dart';
+import 'package:onlineprinterapp/widgets/chart.dart';
 import 'package:onlineprinterapp/widgets/splashscreen.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'package:onlineprinterapp/widgets/unlockbutton.dart';
@@ -28,6 +29,9 @@ class DashboardWidget extends State<Dashboard> {
   Map jsonArchive = {};
 
   static Timer? timer;
+
+  List<double> bedTempArchive = [];
+  List<double> nozzleTempArchive = [];
 
   @override
   void initState() {
@@ -75,9 +79,16 @@ class DashboardWidget extends State<Dashboard> {
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    //print(nozzleTempArchive);
     return FutureBuilder<String>(
         future: DashboardUtils.getPrinter(widget.username, widget.password),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (bedTempArchive.length > 12) {
+            bedTempArchive.removeAt(0);
+          }
+          if (nozzleTempArchive.length > 12) {
+            nozzleTempArchive.removeAt(0);
+          }
           Widget app;
           if (snapshot.hasData) {
             String? snapdata = snapshot.data;
@@ -320,6 +331,11 @@ class DashboardWidget extends State<Dashboard> {
                                       if (jsonL != {} ||
                                           jsonL != null ||
                                           jsonL["temp"] != null) {
+                                        if (jsonL["temp"]["bed"]["current"]
+                                            is double) {
+                                          bedTempArchive.add(
+                                              jsonL["temp"]["bed"]["current"]);
+                                        }
                                         return Text(
                                           jsonL["temp"]["bed"]["current"]
                                               .toString(),
@@ -420,6 +436,11 @@ class DashboardWidget extends State<Dashboard> {
                                     if (jsonL != {} ||
                                         jsonL != null ||
                                         jsonL["temp"] != null) {
+                                      if (jsonL["temp"]["nozzle"]["current"]
+                                          is double) {
+                                        nozzleTempArchive.add(
+                                            jsonL["temp"]["nozzle"]["current"]);
+                                      }
                                       return Text(
                                         jsonL["temp"]["nozzle"]["current"]
                                             .toString(),
@@ -485,6 +506,10 @@ class DashboardWidget extends State<Dashboard> {
                           ),
                           Container(height: 10),
                         ])),
+                        Card(
+                            child: LineChartPrinter(
+                                bedTemp: bedTempArchive,
+                                nozzleTemp: nozzleTempArchive)),
                         (() {
                           bool canAbort = false;
                           try {
@@ -521,9 +546,10 @@ class DashboardWidget extends State<Dashboard> {
                                     print(response.body.toString());
                                     print(response.statusCode);
                                   }),
+                              Container(height: 10),
                             ]));
                           } else {
-                            return Container(height: 1);
+                            return Container(height: 0);
                           }
                         }())
                       ]),

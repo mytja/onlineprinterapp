@@ -15,7 +15,7 @@ String SERVER_URL_REGISTER = SERVER_URL + "api/auth/register";
 String SERVER_URL_UNLOCK_PRINTER = SERVER_URL + "api/printer/unlock";
 String SERVER_URL_CONTROL = SERVER_URL + "api/printer/control";
 
-const String VERSION = "Beta 1.1.2";
+const String VERSION = "Beta 1.1.3";
 
 void updateVars(String baseURL) {
   print(baseURL);
