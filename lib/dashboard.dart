@@ -494,7 +494,34 @@ class DashboardWidget extends State<Dashboard> {
                             canAbort = false;
                           }
                           if (canAbort == true) {
-                            return Card(child: Column(children: []));
+                            return Card(
+                                child: Column(children: [
+                              Container(height: 10),
+                              Container(
+                                  height: 20,
+                                  child: Center(
+                                      child: Text(
+                                    'Print',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ))),
+                              Container(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                  child: Text("Abort print"),
+                                  onPressed: () async {
+                                    http.Response response = await http.get(
+                                        Uri.parse(SERVER_URL_ABORT_PRINT +
+                                            "?username=" +
+                                            widget.username +
+                                            "&password=" +
+                                            widget.password));
+                                    print(response.body.toString());
+                                    print(response.statusCode);
+                                  }),
+                            ]));
                           } else {
                             return Container(height: 1);
                           }
