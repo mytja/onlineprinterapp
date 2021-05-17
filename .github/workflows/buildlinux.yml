@@ -36,12 +36,10 @@ jobs:
     
     - name: Build Linux app
       run: flutter build linux --verbose
-    
-    - run: ls build/linux
 
-    - run: ls build/linux/x64/release
+    - run: ls build/linux/x64/release/bundle
     
     - uses: actions/upload-artifact@v1
       with:
         name: linux_onlineprinter
-        path: build/linux/x64/release
+        path: build/linux/x64/release/bundle
