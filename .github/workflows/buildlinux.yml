@@ -19,7 +19,7 @@ jobs:
 
     - run: flutter pub upgrade
 
-    - run: flutter config --enable-windows-desktop
+    - run: flutter config --enable-linux-desktop
     
     - run: flutter build linux --verbose
 
