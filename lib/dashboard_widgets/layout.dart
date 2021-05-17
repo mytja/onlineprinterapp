@@ -61,6 +61,8 @@ class DashboardLayout extends StatelessWidget {
                 BedWidget(jsonL: jsonL, username: username, password: password),
                 NozzleWidget(
                     jsonL: jsonL, username: username, password: password),
+                AbortWidget(
+                    jsonL: jsonL, username: username, password: password)
               ])),
               Expanded(
                   child: Column(children: [
@@ -71,7 +73,6 @@ class DashboardLayout extends StatelessWidget {
                         nozzleTemp: tempArchive.nozzleTempArchive)),
               ]))
             ]),
-            AbortWidget(jsonL: jsonL, username: username, password: password)
           ]);
     } else {
       return ListView(
