@@ -1,4 +1,4 @@
-name: Build Android app
+name: Build Linux app
 
 on: 
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build APK and Create release
+    name: Build Linux app
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -15,13 +15,17 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '2.0.4'
+        channel: beta
 
     - run: flutter pub upgrade
+
+    - run: flutter config --enable-windows-desktop
     
-    - run: flutter build apk --verbose
+    - run: flutter build linux --verbose
+
+    - run: ls build/linux/release/bundle/
     
     - uses: actions/upload-artifact@v1
       with:
-        name: android_onlineprinter
-        path: build/app/outputs/apk/release/app-release.apk
+        name: linux_onlineprinter
+        path: build/linux/release/bundle/

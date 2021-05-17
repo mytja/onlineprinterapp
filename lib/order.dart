@@ -47,7 +47,7 @@ class OrderMain extends State<Order> {
     if (300 > responseCode && responseCode > 199) {
       Flash startprint = Flash(
           id: "startprint",
-          mainText: Text(
+          mainText: const Text(
             "Successfully started to print",
           ),
           icon: Icon(Icons.check),
@@ -57,7 +57,7 @@ class OrderMain extends State<Order> {
     } else {
       Flash startprint = Flash(
           id: "startprint",
-          mainText: Text(
+          mainText: const Text(
             "Failed to start a print. \nSomething is already printing",
           ),
           icon: Icon(Icons.cancel),
@@ -97,18 +97,16 @@ class OrderMain extends State<Order> {
                   print(jsonL["responseCode"]);
                   if (jsonL["responseCode"] == 200) {
                     children = <Widget>[
-                      Container(height: 10),
-                      (() {
-                        return MaterialFlash(
-                          ignore: ["printstatus", "registerfailed"],
-                          deleteAll: true,
-                        );
-                      }()),
-                      Container(
+                      const SizedBox(height: 10),
+                      MaterialFlash(
+                        ignore: ["printstatus", "registerfailed"],
+                        deleteAll: true,
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(children: [
-                        Container(
+                        const SizedBox(
                           width: 5,
                         ),
                         Container(
@@ -120,7 +118,7 @@ class OrderMain extends State<Order> {
                             child: Text(jsonL["filename"]))
                       ]),
                       Row(children: [
-                        Container(
+                        const SizedBox(
                           width: 5,
                         ),
                         Container(
@@ -132,7 +130,7 @@ class OrderMain extends State<Order> {
                             child: Text(jsonL["id"].toString()))
                       ]),
                       Row(children: [
-                        Container(
+                        const SizedBox(
                           width: 5,
                         ),
                         Container(
@@ -142,13 +140,11 @@ class OrderMain extends State<Order> {
                         Container(
                             width: width / 3 * 2, child: Text(jsonL["status"]))
                       ]),
+                      const SizedBox(
+                        width: 5,
+                      ),
                       Row(children: [
-                        Container(
-                          width: 5,
-                        ),
-                      ]),
-                      Row(children: [
-                        Container(
+                        const SizedBox(
                           width: 5,
                         ),
                         Container(

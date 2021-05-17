@@ -4,10 +4,10 @@ class Waiting extends StatelessWidget {
   Widget waiting() {
     return Center(
         child: Column(children: [
-      Container(
+      const SizedBox(
         height: 20,
       ),
-      SizedBox(
+      const SizedBox(
         child: CircularProgressIndicator(),
         width: 60,
         height: 60,
@@ -25,10 +25,10 @@ class Waiting extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
+      const SizedBox(
         height: 20,
       ),
-      SizedBox(
+      const SizedBox(
         child: CircularProgressIndicator(),
         width: 60,
         height: 60,

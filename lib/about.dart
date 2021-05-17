@@ -51,23 +51,26 @@ class AboutScreen extends State<AboutState> {
     return ListView(
       physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
-        Container(height: 10),
-        Center(child: Text("OnlinePrinterApp", style: TextStyle(fontSize: 25))),
-        Container(height: 10),
+        const SizedBox(height: 10),
+        const Center(
+            child: const Text("OnlinePrinterApp",
+                style: const TextStyle(fontSize: 25))),
+        const SizedBox(height: 10),
         Card(
           child: Column(
             children: [
-              Center(
-                  child: Text("Description", style: TextStyle(fontSize: 25))),
-              Container(height: 10),
+              const Center(
+                  child: const Text("Description",
+                      style: const TextStyle(fontSize: 25))),
+              const SizedBox(height: 10),
               Row(children: [
                 Container(
                     width: width / 5,
                     child: Image.asset("assets/logo-small.png")),
-                Container(width: 5),
+                const SizedBox(width: 5),
                 Column(
                   children: [
-                    Text(
+                    const Text(
                       "OnlinePrinterApp is an offical app \nfor OnlinePrinter API. \nIt is maintained by @mytja \nand written in Flutter",
                     ),
                   ],
@@ -114,9 +117,11 @@ class AboutScreen extends State<AboutState> {
                 ],
               ),
             )),
-        Container(height: 30),
-        Center(child: Text("The developers", style: TextStyle(fontSize: 25))),
-        Container(height: 10),
+        const SizedBox(height: 30),
+        const Center(
+            child: const Text("The developers",
+                style: const TextStyle(fontSize: 25))),
+        const SizedBox(height: 10),
         GestureDetector(
             onTap: () async {
               if (await canLaunch("https://github.com/mytja")) {

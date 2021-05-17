@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:fl_flash/fl_flash.dart';
@@ -46,13 +48,13 @@ class RegisterPage extends State<Register> {
   void invalidRegister(int responseCode) {
     Flash _409 = Flash(
         id: "registerfailed",
-        mainText: Text(
+        mainText: const Text(
           "Registration failed \nAccount already exists",
         ),
         backgroundColor: Colors.red.shade400);
     Flash _400 = Flash(
         id: "registerfailed",
-        mainText: Text(
+        mainText: const Text(
           "Registration failed \nBad request \nApp hasn't provided enough credentials for login",
         ),
         backgroundColor: Colors.red.shade400);
@@ -87,12 +89,13 @@ class RegisterPage extends State<Register> {
                     deleteAll: false,
                   );
                 }()),
-                Container(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   "OnlinePrinter Registration",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                Container(
+                const SizedBox(
                   height: 20,
                 ),
                 TextField(
@@ -138,7 +141,7 @@ class RegisterPage extends State<Register> {
                     labelText: 'Password',
                   ),
                 ),
-                Container(
+                const SizedBox(
                   height: 10,
                 ),
                 ElevatedButton(

@@ -47,17 +47,17 @@ class OrdersMain extends State<Orders> {
                 physics: BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 children: <Widget>[
-                  Container(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
                     children: <Widget>[
-                      Container(width: 5),
+                      const SizedBox(width: 5),
                       Container(
                           width: width / 2,
                           child: Text("Filename",
                               style: TextStyle(fontWeight: FontWeight.bold))),
-                      Container(width: 10),
+                      const SizedBox(width: 10),
                       Container(
                           width: width / 10,
                           child: Text("ID",
@@ -85,7 +85,7 @@ class OrdersMain extends State<Orders> {
                                 width: 5,
                                 color: colorfromhex(jsonOrders[index]["color"]),
                               ),
-                              Container(width: 5),
+                              const SizedBox(width: 5),
                               Container(
                                   width: width / 10,
                                   child: Text(

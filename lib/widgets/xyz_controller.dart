@@ -10,70 +10,116 @@ class PositionController extends StatelessWidget {
   final String password;
 
   Widget build(BuildContext context) {
-    Future<void> controlPrinter(
-        String mode, String username, String password) async {
+    Future<void> controlPrinter(String mode, String username, String password,
+        int? x, int? z, int? y) async {
       Uri uri = Uri.parse(SERVER_URL_CONTROL +
-          "?mode=" +
+          "?command=" +
           mode +
           "&username=" +
           username +
           "&password=" +
-          password);
+          password +
+          "&x=" +
+          x.toString() +
+          "&y=" +
+          y.toString() +
+          "&z=" +
+          z.toString());
       await http.get(uri);
     }
 
     return Card(
         child: Column(children: [
-      Container(height: 10),
-      Center(child: Text("Printer control", style: TextStyle(fontSize: 25))),
-      Container(height: 10),
-      Center(
-          child: IconButton(
-        icon: Icon(Icons.arrow_upward),
-        onPressed: () async {
-          print("up");
-          await controlPrinter("up", this.username, this.password);
-        },
-      )),
-      Center(
-          child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, //Center Column contents vertically,
-              crossAxisAlignment: CrossAxisAlignment
-                  .center, //Center Column contents horizontally,
-              children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () async {
-                print("left");
-                await controlPrinter("left", this.username, this.password);
-              },
-            ),
-            Container(width: 50),
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () async {
-                print("home");
-                await controlPrinter("home", this.username, this.password);
-              },
-            ),
-            Container(width: 50),
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () async {
-                print("right");
-                await controlPrinter("right", this.username, this.password);
-              },
-            ),
-          ])),
-      Center(
-          child: IconButton(
-        icon: Icon(Icons.arrow_downward),
-        onPressed: () async {
-          print("down");
-          await controlPrinter("down", this.username, this.password);
-        },
-      )),
+      const SizedBox(height: 10),
+      const Center(
+          child: const Text("Printer control",
+              style: const TextStyle(fontSize: 25))),
+      const SizedBox(height: 10),
+      Row(
+          mainAxisAlignment:
+              MainAxisAlignment.center, //Center Column contents vertically,
+          crossAxisAlignment:
+              CrossAxisAlignment.center, //Center Column contents horizontally,
+          children: [
+            Column(
+                mainAxisAlignment: MainAxisAlignment
+                    .center, //Center Column contents vertically,
+                crossAxisAlignment: CrossAxisAlignment
+                    .center, //Center Column contents horizontally,
+                children: [
+                  Center(
+                      child: IconButton(
+                    icon: const Icon(Icons.arrow_upward),
+                    onPressed: () async {
+                      print("up");
+                      await controlPrinter(
+                          "jog", this.username, this.password, 0, 10, 0);
+                    },
+                  )),
+                  Center(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, //Center Column contents vertically,
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center, //Center Column contents horizontally,
+                          children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () async {
+                            print("left");
+                            await controlPrinter(
+                                "jog", this.username, this.password, -10, 0, 0);
+                          },
+                        ),
+                        const SizedBox(width: 50),
+                        IconButton(
+                          icon: const Icon(Icons.home),
+                          onPressed: () async {
+                            print("home");
+                            await controlPrinter("home", this.username,
+                                this.password, null, null, null);
+                          },
+                        ),
+                        const SizedBox(width: 50),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_forward),
+                          onPressed: () async {
+                            print("right");
+                            await controlPrinter(
+                                "jog", this.username, this.password, 10, 0, 0);
+                          },
+                        ),
+                      ])),
+                  Center(
+                      child: IconButton(
+                    icon: const Icon(Icons.arrow_downward),
+                    onPressed: () async {
+                      print("down");
+                      await controlPrinter(
+                          "jog", this.username, this.password, 0, -10, 0);
+                    },
+                  )),
+                ]),
+            const SizedBox(width: 40),
+            Column(children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_upward),
+                onPressed: () async {
+                  print("up-z");
+                  await controlPrinter(
+                      "jog", this.username, this.password, 0, 0, 10);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_downward),
+                onPressed: () async {
+                  print("down-z");
+                  await controlPrinter(
+                      "jog", this.username, this.password, 0, 0, -10);
+                },
+              )
+            ])
+          ])
     ]));
   }
 }

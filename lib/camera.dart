@@ -48,24 +48,24 @@ class CameraStreamMain extends State<CameraStream> {
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
-          Container(
+          const SizedBox(
             height: 30,
           ),
           Card(
               child: Column(children: [
-            Container(height: 10),
-            Center(
-                child: Text(
+            const SizedBox(height: 10),
+            const Center(
+                child: const Text(
               "Webcam Stream: ",
-              style: TextStyle(fontSize: 26),
+              style: const TextStyle(fontSize: 26),
             )),
-            Container(height: 5),
+            const SizedBox(height: 5),
             MjpegView(
               url: SERVER_URL_WEBCAM,
             ),
-            Container(height: 10),
+            const SizedBox(height: 10),
           ])),
-          Container(height: 20),
+          const SizedBox(height: 20),
           PositionController(
               username: widget.username, password: widget.password),
         ]));
