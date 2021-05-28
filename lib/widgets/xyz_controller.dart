@@ -11,7 +11,7 @@ class PositionController extends StatelessWidget {
 
   Widget build(BuildContext context) {
     Future<void> controlPrinter(String mode, String username, String password,
-        int? x, int? z, int? y) async {
+        int? x, int? y, int? z) async {
       Uri uri = Uri.parse(SERVER_URL_CONTROL +
           "?command=" +
           mode +
@@ -76,8 +76,8 @@ class PositionController extends StatelessWidget {
                           icon: const Icon(Icons.home),
                           onPressed: () async {
                             print("home");
-                            await controlPrinter("home", this.username,
-                                this.password, null, null, null);
+                            await controlPrinter(
+                                "home", this.username, this.password, 0, 0, 0);
                           },
                         ),
                         const SizedBox(width: 50),
