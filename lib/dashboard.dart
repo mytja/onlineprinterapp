@@ -30,20 +30,35 @@ class DashboardWidget extends State<Dashboard> {
   Map jsonArchive = {};
 
   static Timer? timer;
+  bool isServerOnline = false;
 
   @override
   void initState() {
     super.initState();
     const oneSecond = const Duration(seconds: 2);
     timer = Timer.periodic(oneSecond, (Timer t) async {
-      String snapdata =
+      String? snapdata =
           await DashboardUtils.getPrinter(widget.username, widget.password);
       bool stateRefresh = false;
-      try {
-        json.decode(snapdata);
+      if (snapdata != null) {
+        try {
+          json.decode(snapdata);
+          stateRefresh = true;
+        } catch (e) {
+          stateRefresh = false;
+        }
+        isServerOnline = true;
+      } else {
         stateRefresh = true;
-      } catch (e) {
-        stateRefresh = false;
+        isServerOnline = false;
+        Flash startprint = Flash(
+            id: "printstatus",
+            mainText: Text(
+              "Not operational",
+            ),
+            icon: Icon(Icons.cancel),
+            backgroundColor: Colors.red.shade400);
+        FlashManager.add(startprint);
       }
       if (stateRefresh) {
         setState(() {});
@@ -77,9 +92,9 @@ class DashboardWidget extends State<Dashboard> {
 
   Widget build(BuildContext context) {
     //print(nozzleTempArchive);
-    return FutureBuilder<String>(
+    return FutureBuilder<String?>(
         future: DashboardUtils.getPrinter(widget.username, widget.password),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (tempArchive.bedTempArchive.length > 12) {
             tempArchive.bedTempArchive.removeAt(0);
           }
@@ -120,8 +135,20 @@ class DashboardWidget extends State<Dashboard> {
                       backgroundColor: Colors.red.shade300,
                       icon: Icon(Icons.cancel));
                   FlashManager.add(status);
+                } else {
+                  Flash startprint = Flash(
+                      id: "printstatus",
+                      mainText: Text(
+                        "Not operational",
+                        style: TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      icon: Icon(Icons.cancel),
+                      backgroundColor: Colors.red.shade400);
+                  FlashManager.add(startprint);
                 }
               }
+              print("App");
               app = MaterialApp(
                 home: Scaffold(
                     floatingActionButton: UnlockButton(
@@ -143,6 +170,7 @@ class DashboardWidget extends State<Dashboard> {
                 debugShowCheckedModeBanner: false,
               );
             } else {
+              print("null");
               app = ExceptionApp(
                 exception: "Request has returned null",
               );
@@ -169,8 +197,11 @@ class DashboardWidget extends State<Dashboard> {
           } else {
             app = MaterialApp(
               home: Scaffold(
-                  body: ListView(
-                      children: [Splash(), Container(height: 20), Waiting()])),
+                  body: ListView(children: [
+                Splash(),
+                const SizedBox(height: 20),
+                Waiting()
+              ])),
               theme: Themes.LightTheme(),
               darkTheme: Themes.DarkTheme(),
               themeMode: Themes.Theme(),
@@ -182,12 +213,24 @@ class DashboardWidget extends State<Dashboard> {
 }
 
 class DashboardUtils {
-  static Future<String> getPrinter(String username, String password) async {
-    var printer = await http.get(Uri.parse(SERVER_URL_PRINTER +
-        "?username=" +
-        username +
-        "&password=" +
-        password));
-    return printer.body.toString();
+  static Future<String?> getPrinter(String username, String password) async {
+    try {
+      var printer = await http.get(Uri.parse(SERVER_URL_PRINTER +
+          "?username=" +
+          username +
+          "&password=" +
+          password));
+      return printer.body.toString();
+    } catch (e) {
+      Flash startprint = Flash(
+          id: "printstatus",
+          mainText: Text(
+            "Not operational",
+          ),
+          icon: Icon(Icons.cancel),
+          backgroundColor: Colors.red.shade400);
+      FlashManager.add(startprint);
+      return null;
+    }
   }
 }

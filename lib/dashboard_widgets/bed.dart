@@ -20,98 +20,102 @@ class BedWidget extends StatelessWidget {
       w1 = width / 2 / 2 - 5 - 4;
       w2 = width / 2 / 2 - 4;
     }
-    return Card(
-        child: Column(children: [
-      const SizedBox(height: 10),
-      const SizedBox(
-          height: 20,
-          child: const Center(
-              child: const Text(
-            'Bed',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ))),
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        children: [
-          const SizedBox(
-            width: 5,
-          ),
-          SizedBox(
-            width: w1,
-            child: Text(
-              'Current temperature',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    try {
+      return Card(
+          child: Column(children: [
+        const SizedBox(height: 10),
+        const SizedBox(
+            height: 20,
+            child: const Center(
+                child: const Text(
+              'Bed',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ))),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 5,
             ),
-          ),
-          Container(
-            width: w2,
-            child: Container(
+            SizedBox(
+              width: w1,
+              child: Text(
+                'Current temperature',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            Container(
+              width: w2,
+              child: Container(
+                  width: w2,
+                  child: (() {
+                    if (jsonL != {} || jsonL["temp"] != null) {
+                      if (jsonL["temp"]["bed"]["current"] is double) {
+                        tempArchive.bedTempArchive
+                            .add(jsonL["temp"]["bed"]["current"]);
+                      }
+                      return Text(
+                        jsonL["temp"]["bed"]["current"].toString(),
+                      );
+                    }
+                  }())),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 5,
+            ),
+            Container(
+              width: w1,
+              child: Text(
+                'Target temperature',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            Container(
                 width: w2,
                 child: (() {
                   if (jsonL != {} || jsonL["temp"] != null) {
-                    if (jsonL["temp"]["bed"]["current"] is double) {
-                      tempArchive.bedTempArchive
-                          .add(jsonL["temp"]["bed"]["current"]);
-                    }
                     return Text(
-                      jsonL["temp"]["bed"]["current"].toString(),
+                      jsonL["temp"]["bed"]["target"].toString(),
                     );
                   }
                 }())),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          const SizedBox(
-            width: 5,
-          ),
-          Container(
-            width: w1,
-            child: Text(
-              'Target temperature',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ),
-          Container(
-              width: w2,
-              child: (() {
-                if (jsonL != {} || jsonL["temp"] != null) {
-                  return Text(
-                    jsonL["temp"]["bed"]["target"].toString(),
-                  );
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+            width: width,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Temperature',
+              ),
+              onSubmitted: (String temp) async {
+                try {
+                  var temperature = int.parse(temp);
+                  var response = await http.get(Uri.parse(SERVER_URL_BED_SET +
+                      temperature.toString() +
+                      "?username=" +
+                      username +
+                      "&password=" +
+                      password));
+                  print(response.statusCode);
+                } catch (e) {
+                  print(e);
                 }
-              }())),
-        ],
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      Container(
-          width: width,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Temperature',
-            ),
-            onSubmitted: (String temp) async {
-              try {
-                var temperature = int.parse(temp);
-                var response = await http.get(Uri.parse(SERVER_URL_BED_SET +
-                    temperature.toString() +
-                    "?username=" +
-                    username +
-                    "&password=" +
-                    password));
-                print(response.statusCode);
-              } catch (e) {
-                print(e);
-              }
-            },
-          )),
-      SizedBox(height: 10),
-    ]));
+              },
+            )),
+        const SizedBox(height: 10),
+      ]));
+    } catch (e) {
+      return Container(height: 0);
+    }
   }
 }

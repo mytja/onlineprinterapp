@@ -14,6 +14,8 @@ String SERVER_URL_ABORT_PRINT = SERVER_URL + "api/order/abort";
 String SERVER_URL_REGISTER = SERVER_URL + "api/auth/register";
 String SERVER_URL_UNLOCK_PRINTER = SERVER_URL + "api/printer/unlock";
 String SERVER_URL_CONTROL = SERVER_URL + "api/printer/control";
+String SERVER_URL_PAUSE_PRINT = SERVER_URL + "api/order/pause";
+String SERVER_URL_RESUME_PRINT = SERVER_URL + "api/order/resume";
 
 const String VERSION = "Beta 1.1.4";
 
@@ -34,5 +36,7 @@ void updateVars(String baseURL) {
     SERVER_URL_REGISTER = SERVER_URL + "api/auth/register";
     SERVER_URL_UNLOCK_PRINTER = SERVER_URL + "api/printer/unlock";
     SERVER_URL_CONTROL = SERVER_URL + "api/printer/control";
+    SERVER_URL_PAUSE_PRINT = SERVER_URL + "api/order/pause";
+    SERVER_URL_RESUME_PRINT = SERVER_URL + "api/order/resume";
   }
 }

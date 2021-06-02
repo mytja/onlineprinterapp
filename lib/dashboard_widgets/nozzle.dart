@@ -20,98 +20,103 @@ class NozzleWidget extends StatelessWidget {
       w1 = width / 2 / 2 - 5 - 4;
       w2 = width / 2 / 2 - 4;
     }
-    return Card(
-        child: Column(children: [
-      const SizedBox(height: 10),
-      const SizedBox(
-          height: 20,
-          child: Center(
+    try {
+      return Card(
+          child: Column(children: [
+        const SizedBox(height: 10),
+        const SizedBox(
+            height: 20,
+            child: Center(
+                child: Text(
+              'Nozzle',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ))),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 5,
+            ),
+            Container(
+              width: w1,
               child: Text(
-            'Nozzle',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ))),
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        children: [
-          const SizedBox(
-            width: 5,
-          ),
-          Container(
-            width: w1,
-            child: Text(
-              'Current temperature',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                'Current temperature',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
             ),
-          ),
-          Container(
-              width: w2,
-              child: (() {
-                if (jsonL != {} || jsonL["temp"] != null) {
-                  if (jsonL["temp"]["nozzle"]["current"] is double) {
-                    tempArchive.nozzleTempArchive
-                        .add(jsonL["temp"]["nozzle"]["current"]);
-                  }
-                  return Text(
-                    jsonL["temp"]["nozzle"]["current"].toString(),
-                  );
-                }
-              }())),
-        ],
-      ),
-      Row(
-        children: [
-          const SizedBox(
-            width: 5,
-          ),
-          Container(
-            width: w1,
-            child: Text(
-              'Target temperature',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ),
-          Container(
-            width: w2,
-            child: Container(
+            Container(
                 width: w2,
                 child: (() {
                   if (jsonL != {} || jsonL["temp"] != null) {
+                    if (jsonL["temp"]["nozzle"]["current"] is double) {
+                      tempArchive.nozzleTempArchive
+                          .add(jsonL["temp"]["nozzle"]["current"]);
+                    }
                     return Text(
-                      jsonL["temp"]["nozzle"]["target"].toString(),
+                      jsonL["temp"]["nozzle"]["current"].toString(),
                     );
                   }
                 }())),
-          ),
-        ],
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      Container(
-          width: width,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Temperature',
+          ],
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 5,
             ),
-            onSubmitted: (String temp) async {
-              try {
-                var temperature = int.parse(temp);
-                var response = await http.get(Uri.parse(SERVER_URL_NOZZLE_SET +
-                    temperature.toString() +
-                    "?username=" +
-                    username +
-                    "&password=" +
-                    password));
-                print(response.statusCode);
-              } catch (e) {
-                print(e);
-              }
-            },
-          )),
-      const SizedBox(height: 10),
-    ]));
+            Container(
+              width: w1,
+              child: Text(
+                'Target temperature',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            Container(
+              width: w2,
+              child: Container(
+                  width: w2,
+                  child: (() {
+                    if (jsonL != {} || jsonL["temp"] != null) {
+                      return Text(
+                        jsonL["temp"]["nozzle"]["target"].toString(),
+                      );
+                    }
+                  }())),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+            width: width,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Temperature',
+              ),
+              onSubmitted: (String temp) async {
+                try {
+                  var temperature = int.parse(temp);
+                  var response = await http.get(Uri.parse(
+                      SERVER_URL_NOZZLE_SET +
+                          temperature.toString() +
+                          "?username=" +
+                          username +
+                          "&password=" +
+                          password));
+                  print(response.statusCode);
+                } catch (e) {
+                  print(e);
+                }
+              },
+            )),
+        const SizedBox(height: 10),
+      ]));
+    } catch (e) {
+      return Container(height: 0);
+    }
   }
 }

@@ -16,72 +16,86 @@ class JobWidget extends StatelessWidget {
       w2 = width / 2 / 2 - 4;
     }
 
-    if (jsonL["job"]["job"] != null) {
-      return Card(
-          child: Column(children: [
-        const SizedBox(height: 10),
-        const SizedBox(
-            height: 20,
-            child: const Center(
-                child: const Text(
-              'Job',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ))),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            const SizedBox(
-              width: 5,
-            ),
-            SizedBox(
-              width: w1,
-              child: Text(
-                'Finished (%)',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    try {
+      if (jsonL["job"] != null) {
+        return Card(
+            child: Column(children: [
+          const SizedBox(height: 10),
+          const SizedBox(
+              height: 20,
+              child: const Center(
+                  child: const Text(
+                'Job',
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ))),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 5,
               ),
-            ),
-            Container(
-              width: w2,
-              child: Container(
+              SizedBox(
+                width: w1,
+                child: Text(
+                  'Finished (%)',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              Container(
+                width: w2,
+                child: Container(
+                    width: w2,
+                    child: (() {
+                      if (jsonL != {}) {
+                        return Text(
+                          jsonL["job"]["progress"]["completion"].toString() +
+                              "%",
+                        );
+                      } else {
+                        return Text(
+                          "0" + "%",
+                        );
+                      }
+                    }())),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 5,
+              ),
+              Container(
+                width: w1,
+                child: Text(
+                  'Name',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              Container(
                   width: w2,
                   child: (() {
-                    if (jsonL != {} || jsonL["job"] != null) {
+                    if (jsonL != {}) {
                       return Text(
-                        jsonL["job"]["progress"]["completion"].toString() + "%",
+                        jsonL["job"]["job"]["file"]["name"].toString(),
+                      );
+                    } else {
+                      return Text(
+                        "Nothing is printing",
                       );
                     }
                   }())),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const SizedBox(
-              width: 5,
-            ),
-            Container(
-              width: w1,
-              child: Text(
-                'Name',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
-            Container(
-                width: w2,
-                child: (() {
-                  if (jsonL != {} || jsonL["job"] != null) {
-                    return Text(
-                      jsonL["job"]["job"]["file"]["name"].toString(),
-                    );
-                  }
-                }())),
-          ],
-        ),
-        const SizedBox(height: 10),
-      ]));
-    } else {
+            ],
+          ),
+          const SizedBox(height: 10),
+        ]));
+      } else {
+        return Container(height: 0);
+      }
+    } catch (e) {
       return Container(height: 0);
     }
   }

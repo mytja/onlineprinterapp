@@ -43,6 +43,32 @@ class AbortWidget extends StatelessWidget {
               print(response.body.toString());
               print(response.statusCode);
             }),
+        const SizedBox(height: 5),
+        ElevatedButton(
+            child: Text("Pause print"),
+            onPressed: () async {
+              http.Response response = await http.get(Uri.parse(
+                  SERVER_URL_PAUSE_PRINT +
+                      "?username=" +
+                      username +
+                      "&password=" +
+                      password));
+              print(response.body.toString());
+              print(response.statusCode);
+            }),
+        const SizedBox(height: 5),
+        ElevatedButton(
+            child: Text("Resume print"),
+            onPressed: () async {
+              http.Response response = await http.get(Uri.parse(
+                  SERVER_URL_RESUME_PRINT +
+                      "?username=" +
+                      username +
+                      "&password=" +
+                      password));
+              print(response.body.toString());
+              print(response.statusCode);
+            }),
         const SizedBox(height: 10),
       ]));
     } else {
