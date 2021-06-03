@@ -17,7 +17,7 @@ String SERVER_URL_CONTROL = SERVER_URL + "api/printer/control";
 String SERVER_URL_PAUSE_PRINT = SERVER_URL + "api/order/pause";
 String SERVER_URL_RESUME_PRINT = SERVER_URL + "api/order/resume";
 
-const String VERSION = "Beta 1.1.4";
+const String VERSION = "Beta 1.2";
 
 void updateVars(String baseURL) {
   print(baseURL);
