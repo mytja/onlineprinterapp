@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/crypto.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 import '../constants/constants.dart';
 
@@ -32,11 +33,8 @@ class ExceptionScreen extends State<ExceptionApp> {
       print("None!");
       return "None";
     } else {
-      var response = await http.get(Uri.parse(SERVER_URL_ORDERS +
-          "?username=" +
-          username +
-          "&password=" +
-          password));
+      var response = await http.get(Uri.parse(SERVER_URL_ORDERS),
+          headers: auth.getBasicHeader(username, password));
       return response.body.toString();
     }
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fl_flash/fl_flash.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlineprinterapp/crypto.dart';
 import 'package:onlineprinterapp/screens/exception.dart';
 import 'package:onlineprinterapp/widgets/themedata.dart';
 import 'constants/constants.dart';
@@ -31,14 +32,10 @@ class OrderMain extends State<Order> {
       print("None!");
       return "None";
     } else {
-      String url = SERVER_URL_ORDER +
-          id.toString() +
-          "?username=" +
-          username +
-          "&password=" +
-          password;
+      String url = SERVER_URL_ORDER + id.toString();
       print(url);
-      var response = await http.get(Uri.parse(url));
+      var response = await http.get(Uri.parse(url),
+          headers: auth.getBasicHeader(username, password));
       return response.body.toString();
     }
   }
@@ -156,13 +153,11 @@ class OrderMain extends State<Order> {
                             child: ElevatedButton(
                               child: Text("START"),
                               onPressed: () async {
-                                var r = await http.get(Uri.parse(
-                                    SERVER_URL_ORDER_START +
-                                        jsonL["id"].toString() +
-                                        "?username=" +
-                                        widget.username +
-                                        "&password=" +
-                                        widget.password));
+                                var r = await http.get(
+                                    Uri.parse(SERVER_URL_ORDER_START +
+                                        jsonL["id"].toString()),
+                                    headers: auth.getBasicHeader(
+                                        widget.username, widget.password));
                                 print(r.body);
                                 var jsonL2 = json.decode(r.body);
                                 startPrintFlash(jsonL2["responseCode"]);

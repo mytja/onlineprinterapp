@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlineprinterapp/about.dart';
+import 'package:onlineprinterapp/crypto.dart';
 import 'package:onlineprinterapp/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/constants.dart';
@@ -27,11 +28,8 @@ class PrinterDrawerApp extends State<PrinterDrawer> {
       print("None!");
       return "None";
     } else {
-      var response = await http.get(Uri.parse(SERVER_URL_ORDERS +
-          "?username=" +
-          username +
-          "&password=" +
-          password));
+      var response = await http.get(Uri.parse(SERVER_URL_ORDERS),
+          headers: auth.getBasicHeader(username, password));
       return response.body.toString();
     }
   }

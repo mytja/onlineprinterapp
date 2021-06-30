@@ -159,7 +159,7 @@ class RegisterPage extends State<Register> {
                             _emailController.text,
                             _fnameController.text,
                             _lnameController.text);
-                        if (login == 201) {
+                        if (login == 201 || login == 200) {
                           Flash account = Flash(
                               mainText: Text("Account created successfully",
                                   style: TextStyle(

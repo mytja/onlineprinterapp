@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fl_flash/fl_flash.dart';
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/crypto.dart';
 
 import 'package:onlineprinterapp/dashboard.dart';
 import 'package:onlineprinterapp/register.dart';
@@ -55,31 +56,23 @@ class LoginUtils {
     String user = prefs.getString('username') ?? "";
     String pass = prefs.getString('password') ?? "";
     if (pass != "" && user != "" && retryWithShared) {
-      var response = await http.get(Uri.parse(
-          SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass));
+      var response = await http.get(Uri.parse(SERVER_URL_LOGIN),
+          headers: auth.getBasicHeader(username, password));
       return response.body.toString();
     } else if (password == "" || username == "" && retryWithShared == false) {
       print("None");
       return "None";
     } else {
-      var response = await http.get(Uri.parse(SERVER_URL_LOGIN +
-          "?username=" +
-          username +
-          "&password=" +
-          password));
+      var response = await http.get(Uri.parse(SERVER_URL_LOGIN),
+          headers: auth.getBasicHeader(username, password));
       return response.body.toString();
     }
   }
 
   Future<String> startLogin(String user, String pass, bool prefed) async {
     if (pass != "" && user != "") {
-      if (!prefed) {
-        List<int> bytes = utf8.encode(pass);
-        pass = base64.encode(bytes);
-      }
-
-      var response = await http.get(Uri.parse(
-          SERVER_URL_LOGIN + "?username=" + user + "&password=" + pass));
+      var response = await http.get(Uri.parse(SERVER_URL_LOGIN),
+          headers: auth.getBasicHeader(user, pass));
       return response.body.toString();
     } else {
       return "";
@@ -100,17 +93,15 @@ class LoginMain extends State<Login> {
     if (jsonL["responseCode"] == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      List<int> bytes = utf8.encode(_passwordController.text);
-      String password = base64.encode(bytes);
-
       await prefs.setString("username", _usernameController.text);
-      await prefs.setString("password", password);
+      await prefs.setString("password", _passwordController.text);
 
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => Dashboard(
-                username: _usernameController.text, password: password)),
+                username: _usernameController.text,
+                password: _passwordController.text)),
       );
     } else {
       Flash fail = Flash(

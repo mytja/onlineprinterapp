@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onlineprinterapp/constants/constants.dart';
+import 'package:onlineprinterapp/crypto.dart';
 import 'package:onlineprinterapp/dashboard_widgets/archive.dart';
 import 'package:http/http.dart' as http;
 
@@ -100,12 +101,9 @@ class BedWidget extends StatelessWidget {
               onSubmitted: (String temp) async {
                 try {
                   var temperature = int.parse(temp);
-                  var response = await http.get(Uri.parse(SERVER_URL_BED_SET +
-                      temperature.toString() +
-                      "?username=" +
-                      username +
-                      "&password=" +
-                      password));
+                  var response = await http.get(
+                      Uri.parse(SERVER_URL_BED_SET + temperature.toString()),
+                      headers: auth.getBasicHeader(username, password));
                   print(response.statusCode);
                 } catch (e) {
                   print(e);

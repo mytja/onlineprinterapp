@@ -32,6 +32,8 @@ Thanks to following people & organizations for their indirect contribution.
 |[http](https://pub.dev/packages/http)                                                |[Dart](https://pub.dev/publishers/dart.dev/packages)    |
 |[Shared Preferences](https://pub.dev/packages/shared_preferences)                    |[The Flutter Team](https://github.com/flutter)          |
 |[url_launcher](https://pub.dev/packages/url_launcher)                                |[The Flutter Team](https://github.com/flutter)          |
+|[fl_flash](https://github.com/mytja/fl_flash)                                        |[mytja](https://github.com/mytja)                       |
+|[fl_chart](https://pub.dev/packages/fl_chart)                                        |[mytja](https://github.com/imaNNeoFighT)                |
 
 
 ## License

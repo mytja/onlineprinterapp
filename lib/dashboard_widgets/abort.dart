@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlineprinterapp/constants/constants.dart';
+import 'package:onlineprinterapp/crypto.dart';
 
 // ignore: must_be_immutable
 class AbortWidget extends StatelessWidget {
@@ -34,12 +35,9 @@ class AbortWidget extends StatelessWidget {
         ElevatedButton(
             child: Text("Abort print"),
             onPressed: () async {
-              http.Response response = await http.get(Uri.parse(
-                  SERVER_URL_ABORT_PRINT +
-                      "?username=" +
-                      username +
-                      "&password=" +
-                      password));
+              http.Response response = await http.get(
+                  Uri.parse(SERVER_URL_ABORT_PRINT),
+                  headers: auth.getBasicHeader(username, password));
               print(response.body.toString());
               print(response.statusCode);
             }),
@@ -47,12 +45,9 @@ class AbortWidget extends StatelessWidget {
         ElevatedButton(
             child: Text("Pause print"),
             onPressed: () async {
-              http.Response response = await http.get(Uri.parse(
-                  SERVER_URL_PAUSE_PRINT +
-                      "?username=" +
-                      username +
-                      "&password=" +
-                      password));
+              http.Response response = await http.get(
+                  Uri.parse(SERVER_URL_PAUSE_PRINT),
+                  headers: auth.getBasicHeader(username, password));
               print(response.body.toString());
               print(response.statusCode);
             }),
@@ -60,12 +55,9 @@ class AbortWidget extends StatelessWidget {
         ElevatedButton(
             child: Text("Resume print"),
             onPressed: () async {
-              http.Response response = await http.get(Uri.parse(
-                  SERVER_URL_RESUME_PRINT +
-                      "?username=" +
-                      username +
-                      "&password=" +
-                      password));
+              http.Response response = await http.get(
+                  Uri.parse(SERVER_URL_RESUME_PRINT),
+                  headers: auth.getBasicHeader(username, password));
               print(response.body.toString());
               print(response.statusCode);
             }),

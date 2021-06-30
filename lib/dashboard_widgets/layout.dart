@@ -18,7 +18,7 @@ class DashboardLayout extends StatelessWidget {
   String password;
 
   Widget build(BuildContext context) {
-    print(FlashManager.get());
+    //print(FlashManager.get());
     List<Widget> children = [];
     Orientation orientation = MediaQuery.of(context).orientation;
     if (Platform.isWindows ||

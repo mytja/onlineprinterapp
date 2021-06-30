@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:onlineprinterapp/constants/constants.dart';
+import 'package:onlineprinterapp/crypto.dart';
 
 class PositionController extends StatelessWidget {
   PositionController({required this.username, required this.password});
@@ -15,17 +16,13 @@ class PositionController extends StatelessWidget {
       Uri uri = Uri.parse(SERVER_URL_CONTROL +
           "?command=" +
           mode +
-          "&username=" +
-          username +
-          "&password=" +
-          password +
           "&x=" +
           x.toString() +
           "&y=" +
           y.toString() +
           "&z=" +
           z.toString());
-      await http.get(uri);
+      await http.get(uri, headers: auth.getBasicHeader(username, password));
     }
 
     return Card(

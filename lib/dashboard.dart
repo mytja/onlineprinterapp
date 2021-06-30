@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:onlineprinterapp/crypto.dart';
 import 'package:onlineprinterapp/dashboard_widgets/archive.dart';
 import 'package:onlineprinterapp/dashboard_widgets/layout.dart';
 import 'package:onlineprinterapp/screens/exception.dart';
@@ -215,11 +216,8 @@ class DashboardWidget extends State<Dashboard> {
 class DashboardUtils {
   static Future<String?> getPrinter(String username, String password) async {
     try {
-      var printer = await http.get(Uri.parse(SERVER_URL_PRINTER +
-          "?username=" +
-          username +
-          "&password=" +
-          password));
+      var printer = await http.get(Uri.parse(SERVER_URL_PRINTER),
+          headers: auth.getBasicHeader(username, password));
       return printer.body.toString();
     } catch (e) {
       Flash startprint = Flash(
